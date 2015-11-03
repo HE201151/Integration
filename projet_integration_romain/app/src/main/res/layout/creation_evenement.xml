@@ -1,0 +1,149 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="CREATION EVENEMENT "
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/EditText_messageError"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#FF0000"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom Evènement : "
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            />
+        <EditText
+            android:id="@+id/EditText_nomEvent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom Evènement"
+            />
+        <RadioGroup
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/radio_prive"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <RadioButton
+                android:id="@+id/radio_public"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Public"/>
+            <RadioButton
+                android:id="@+id/radio_prive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Privé"
+                android:checked="true"/>
+        </RadioGroup>
+        <EditText
+            android:id="@+id/EditText_motDePasse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Mot de Passe"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre Etapes* : "
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            />
+        <EditText
+            android:id="@+id/EditText_nombreEtape"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre Etapes"
+            />
+        <EditText
+            android:id="@+id/EditText_localite"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Où vous vous trouvez?"
+            />
+        <Button
+            android:id="@+id/bouton_suivant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suivant"
+            />
+        <Button
+            android:id="@+id/bouton_raz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remise à zéro"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*Nombre de lieux où les utilisateurs vont passer."
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@drawable/barre">
+
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_event"
+            android:background="@drawable/button_event_menu"
+            android:layout_gravity="center"
+            android:layout_marginLeft="31dp"
+            android:layout_alignTop="@+id/bouton_accueil"
+            android:layout_toStartOf="@+id/bouton_accueil" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_accueil"
+            android:background="@drawable/button_accueil_menu"
+            android:layout_marginLeft="34dp"
+            android:layout_alignTop="@+id/bouton_profil"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_profil"
+            android:background="@drawable/button_profil_menu"
+            android:layout_marginLeft="33dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="71dp" />
+
+    </RelativeLayout>
+</FrameLayout>
