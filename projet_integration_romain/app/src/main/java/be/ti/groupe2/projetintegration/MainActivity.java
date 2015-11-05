@@ -26,6 +26,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         public static final String JSON_URL = "http://projet_groupe2.hebfree.org/Clients.php";
         private static final String ID = "userID";
 
+        public static final String JSON_URL2 = "http://projet_groupe2.hebfree.org/Events.php";
+        private static final String EVENTNAME = "eventName";
+        private static final String USERID = "sClient";
+
         VariableGlobale context;
 
 
@@ -61,10 +65,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 login = tLogin.getText().toString();
                 mdp = tMdp.getText().toString();
 
-                System.out.println("login : " + login);
-                System.out.println("myjson : " + myJson);
-
-
                 JSONArray result = functions.extractJson(lv.getText().toString());
 
                 functions.searchLogin(result, granted, login, mdp);
@@ -73,9 +73,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 if(granted) {
                     System.out.println("Connexion réussie");
+
+                    functions.getJSON(JSON_URL2, lv);
+                    functions.extractJson(lv.getText().toString());
                     String events = lv.getText().toString();
+
                     context.getApplicationContext();
+
                     System.out.println("---------------    "+ context);
+
                     context.setListEvent(events);
                     Intent profilFilActu = new Intent(this, filActu.class);
                     startActivity(profilFilActu);

@@ -58,7 +58,18 @@ public class filActu extends Activity implements View.OnClickListener {
         event.setOnClickListener(this);
         profil.setOnClickListener(this);
 
+        extractJSON();
+        list=new ArrayList<String>();
+        int length = user.length();
+        System.out.println(length);
+        length = length -1;
+        while (length >= 0){
+            showData(length);
+            length --;
+        }
+        adapter = new ArrayAdapter<String>(this, R.layout.list, R.id.editT, list);
 
+        tv.setAdapter(adapter);
 
     }
 
@@ -87,18 +98,7 @@ public class filActu extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bouton_accueil:
-                extractJSON();
-                list=new ArrayList<String>();
-                int length = user.length();
-                System.out.println(length);
-                length = length -1;
-                while (length >= 0){
-                    showData(length);
-                    length --;
-                }
-                adapter = new ArrayAdapter<String>(this, R.layout.list, R.id.editT, list);
-
-                tv.setAdapter(adapter);
+                //refresh
                 break;
             case R.id.bouton_event:
                 Intent filActuGestionEvenement = new Intent(this, GestionEvenement.class);
