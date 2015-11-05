@@ -34,6 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -64,10 +65,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if(v == connexion){
                 login = tLogin.getText().toString();
                 mdp = tMdp.getText().toString();
+                int id;
 
                 JSONArray result = functions.extractJson(lv.getText().toString());
 
-                functions.searchLogin(result, granted, login, mdp);
+                id=functions.searchLogin(result, granted, login, mdp);
+
+                context.setiDUser(id);
 
                 granted =true;
 

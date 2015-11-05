@@ -15,10 +15,12 @@ import java.net.URL;
 
 public class functions extends VariableGlobale{
 
-    private static final String USERNAME= "userLogin";
-    private static final String MAIL = "userEmail";
+    private static final String PSEUDO= "userLogin";
+    private static final String MAIL = "userMail";
     private static final String PASSWORD = "userPassword";
-
+    private static final String USERID = "userID";
+    private static final String USERNAME= "userName";
+    private static final String FIRSTNAME= "firstName";
 
 
 
@@ -80,23 +82,57 @@ public class functions extends VariableGlobale{
         return null;
     }
 
-    public static void searchLogin(JSONArray users, boolean granted, String login, String mdp){
+    public static int searchLogin(JSONArray users, boolean granted, String login, String mdp){
         int i = 0;
         String cLogin;
         String cMdp;
-
+        int id;
         try{
             while(i<users.length() && !granted){
                 JSONObject jsonObject = users.getJSONObject(i);
-                cLogin = jsonObject.getString(USERNAME);
+                cLogin = jsonObject.getString(PSEUDO);
                 cMdp = jsonObject.getString(PASSWORD);
+                id=jsonObject.getInt(USERID);
                 if(cLogin.equals(login) && cMdp.equals(mdp)){
                     granted = true;
+                    return id;
                 }
                 i++;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return 0;
+    }
+
+    public static user searchUser(JSONArray users, boolean granted, int id){
+        int i = 0;
+        int cId;
+        String cLogin;
+        String cMdp;
+        String name;
+        String firstname;
+
+        try{
+            while(i<users.length() && !granted){
+                JSONObject jsonObject = users.getJSONObject(i);
+                cId=jsonObject.getInt(USERID);
+                if(cId==id){
+                    granted = true;
+                    cLogin = jsonObject.getString(PSEUDO);
+                    cMdp = jsonObject.getString(PASSWORD);
+                    name = jsonObject.getString(USERNAME);
+                    firstname = jsonObject.getString(FIRSTNAME);
+                    user user1 = new user(cLogin, cMdp,cId,name,firstname);
+
+                    return user1;
+                }
+                i++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 }

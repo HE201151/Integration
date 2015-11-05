@@ -13,17 +13,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
 
 public class GestionDuProfil extends Activity implements View.OnClickListener{
 
     Button accueil;
     Button event;
     Button profil;
+    public static  TextView lv = null;
+    public static final String JSON_URL = "http://projet_groupe2.hebfree.org/Clients.php";
+
+    VariableGlobale context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_du_profil);
+        context = (VariableGlobale) this.getApplicationContext();
 
         accueil = (Button) findViewById(R.id.bouton_accueil);
         event = (Button) findViewById(R.id.bouton_event);
@@ -83,20 +90,30 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
 
 
     public void verif_champs(String pseudo, String name, String first_name, String pass, String new_pass, String confirm){
+        int id;
+        boolean granted=false;
+        id = context.getiDUser();
+        int nb_users=0;
+        lv = (TextView) findViewById(R.id.lv);
+        functions.getJSON(JSON_URL, lv);
+        JSONArray result = functions.extractJson(lv.getText().toString());
         //String s = ((MainActivity) this.getApplication()).getGlobal_pseudo();
-        int id = 0;
-        //requete récupère T_users
-        user[] t_users;
-        t_users = new user[10];
-        int nb_users = t_users.length;
+        //int id = 0;
+
+        //requête récupère user grâce à l'id
+        user user1;
+        user1 =functions.searchUser(result, granted, id);
+        //requête récupère tableau
+
+        user[] t_users = new user[10];
         boolean ok;
-        ok=verif_pseudo(id, pseudo,t_users, nb_users);
+        ok=verif_pseudo(user1, pseudo, t_users, nb_users);
         if (ok){
             ok=verif_name(name);
             if (ok){
                 ok=verif_first_name(first_name);
                 if (ok){
-                    ok=verif_pass(id,t_users,pass,new_pass,confirm);
+                    ok=verif_pass(user1,t_users,pass,new_pass,confirm);
                 }
             }
         }
@@ -105,10 +122,10 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
 
     }
 
-    public boolean verif_pseudo(int id,String pseudo, user[] t_users, int nb_users){
+    public boolean verif_pseudo(user user1,String pseudo, user[] t_users, int nb_users){
         //int nbUsers=20;
         boolean ok=true;
-        if(pseudo == t_users[id-1].pseudo){
+        if(pseudo == user1.pseudo){
             System.out.println("Pseudo inchangé");
             return true;
         }
@@ -117,7 +134,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
 
             pseudo=pseudo.toLowerCase();                                //Je met les pseudo en lower case pour les comparer
             for(int i =0; i<nb_users; i++){
-                System.out.print(i);
+                //System.out.print(i);
                 pseudo2=t_users[i].pseudo;
                 pseudo2=pseudo2.toLowerCase();                          //Je compare chaque pseudo du tableau de users
                 if (pseudo == pseudo2){
@@ -166,11 +183,11 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
 
     }
 
-    public boolean verif_pass(int id, user[] t_users, String pass, String new_pass, String confirm){
+    public boolean verif_pass(user user1, user[] t_users, String pass, String new_pass, String confirm){
         boolean ok=true;
         //T_user t_users;
         //requete pour trouver le user avec le pseudo
-        String mdp=t_users[id-1].pass;
+        String mdp=user1.pass;
         if(mdp==pass){
             if(new_pass!=confirm){
                 ok=false;
