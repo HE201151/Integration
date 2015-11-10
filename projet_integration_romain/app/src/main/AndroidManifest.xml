@@ -29,9 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GestionDuProfil"
-            android:label="@string/app_name" />
-        <activity
             android:name=".GestionEvenement"
             android:label="@string/app_name" />
         <activity
