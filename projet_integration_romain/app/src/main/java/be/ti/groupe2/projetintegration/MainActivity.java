@@ -59,44 +59,50 @@ public class MainActivity extends Activity implements View.OnClickListener {
             connexion.setOnClickListener(this);
             inscription.setOnClickListener(this);
         }
-
-        @Override
+/*
+@Override
         public void onClick(View v) {
-            if(v == connexion){
+    if (v == connexion) {
+        login = tLogin.getText().toString();
+        mdp = tMdp.getText().toString();
+        int id;
+
+        JSONArray result = functions.extractJson(lv.getText().toString());
+
+        id = functions.searchLogin(result, granted, login, mdp);
+
+        context.setiDUser(id);
+*/
+        @Override
+        public void onClick (View v){
+            if (v == connexion) {
                 login = tLogin.getText().toString();
                 mdp = tMdp.getText().toString();
-                int id;
+
+                System.out.println("login : " + login);
+                System.out.println("myjson : " + myJson);
+
 
                 JSONArray result = functions.extractJson(lv.getText().toString());
 
-                id=functions.searchLogin(result, granted, login, mdp);
+                functions.searchLogin(result, granted, login, mdp);
 
-                context.setiDUser(id);
+                granted = true;
 
-                granted =true;
-
-                if(granted) {
+                if (granted) {
                     System.out.println("Connexion réussie");
-
-                    functions.getJSON(JSON_URL2, lv);
-                    functions.extractJson(lv.getText().toString());
                     String events = lv.getText().toString();
-
                     context.getApplicationContext();
-
-                    System.out.println("---------------    "+ context);
-
+                    System.out.println("---------------    " + context);
                     context.setListEvent(events);
                     Intent profilFilActu = new Intent(this, filActu.class);
                     startActivity(profilFilActu);
-                }
-                else {
+                } else {
                     cError.setText("Login/mdp incorrect(s)");
                     cError.setVisibility(View.VISIBLE);
                 }
-            }
-            else if(v == inscription){
-              //  functions.VersInscription(v);
+            } else if (v == inscription) {
+                //  functions.VersInscription(v);
             }
         }
     }

@@ -9,6 +9,7 @@ public class VariableGlobale extends Application{
 
     private int iDUser;
     private String listEvent;
+    private String listActu;
     private static Context context;
 
 
@@ -19,6 +20,7 @@ public class VariableGlobale extends Application{
             context = getApplicationContext();
             iDUser = 0;
             listEvent = null;
+            listActu = null;
 
         }
     public static Context getContext(){
@@ -39,6 +41,14 @@ public class VariableGlobale extends Application{
 
     public void setListEvent(String listEvent) {
         this.listEvent = listEvent;
+    }
+
+    public String getlistActu() {
+        return listActu;
+    }
+
+    public void setListActu(String listActu) {
+        this.listActu = listActu;
     }
 
 
