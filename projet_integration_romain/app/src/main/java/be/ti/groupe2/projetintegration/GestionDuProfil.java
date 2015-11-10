@@ -102,7 +102,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
 
         //requête récupère user grâce à l'id
         user user1;
-        user1 =functions.searchUser(result, granted, id);
+        user1 = functions.searchUser(result, granted, id);
         //requête récupère tableau
 
         user[] t_users = new user[10];

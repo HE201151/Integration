@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -25,16 +26,17 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
     Button btn_versEvent = null;
     Button btn_versProfil= null;
 
-    TextView messageError =null;
+    TextView et_messageError =null;
 
-    EditText nomEvent = null;
-    EditText motDePasse = null;
-    EditText nombreEtape = null;
-    EditText localite = null;
+    EditText et_nomEvent = null;
+    EditText et_motDePasse = null;
+
+    EditText et_localite = null;
 
     RadioButton radio_public =null;
     RadioButton radio_prive =null;
 
+    Spinner sp_nbEtape = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +49,18 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
         btn_versEvent = (Button)findViewById(R.id.bouton_event);
         btn_versProfil = (Button)findViewById(R.id.bouton_profil);
 
-        nomEvent = (EditText)findViewById(R.id.EditText_nomEvent);
-        motDePasse = (EditText)findViewById(R.id.EditText_motDePasse);
-        nombreEtape = (EditText)findViewById(R.id.EditText_nombreEtape);
-        localite = (EditText)findViewById(R.id.EditText_localite);
+        sp_nbEtape = (Spinner) findViewById(R.id.sp_nbEtape);
+        et_nomEvent = (EditText)findViewById(R.id.EditText_nomEvent);
+        et_motDePasse = (EditText)findViewById(R.id.EditText_motDePasse);
 
-        messageError =(TextView)findViewById(R.id.EditText_messageError);
+        et_localite = (EditText)findViewById(R.id.EditText_localite);
+
+        et_messageError =(TextView)findViewById(R.id.EditText_messageError);
 
         radio_public = (RadioButton)findViewById(R.id.radio_public);
         radio_prive = (RadioButton)findViewById(R.id.radio_prive);
+
+
 
         btn_suivant.setOnClickListener(this);
         btn_raz.setOnClickListener(this);
@@ -63,36 +68,50 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
         btn_versProfil.setOnClickListener(this);
         radio_public.setOnClickListener(this);
         radio_prive.setOnClickListener(this);
+
+        //Event event = new Event(); création objet Event à venir
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bouton_suivant:
-                Intent nextActivite = new Intent(CreationEvenement.this, CreationEvenementP2.class);
-                startActivity(nextActivite);
-                /*
-                if(nomEvent.getText().length() == 0){
-                    messageError.setText("Vous devez mettre un nom d'évènement.");
+                String nomEvent = et_nomEvent.getText().toString();
+                String mdpEvent = et_motDePasse.getText().toString(); // Hash ?
+                String localiteEvent =  et_localite.getText().toString();
+                boolean radioPrivee = radio_prive.isChecked();
+                int nbEtape = Integer.parseInt(sp_nbEtape.getSelectedItem().toString());
+
+
+                if( (nomEvent.isEmpty()) && (nomEvent != null) ){
+                    et_messageError.setText("Vous devez mettre un nom d'évènement.");
                 }
-                else if(nombreEtape.getText().length() == 0){
-                    messageError.setText("Vous devez mettre un nombre d'étapes");
+                else if( radioPrivee == true ){
+                    if((mdpEvent.isEmpty()) && (mdpEvent != null) ){
+                        et_messageError.setText("Vous devez mettre un mot de passe ou cochez public.");
+                    }
+                }
+                else if( (localiteEvent.isEmpty()) && (localiteEvent != null) ){
+                    et_messageError.setText("Vous devez mettre un lieu d'évènement.");
                 }
                 else{
                     Intent nextActivite = new Intent(CreationEvenement.this, CreationEvenementP2.class);
+                    nextActivite.putExtra("localite", localiteEvent);
+                    nextActivite.putExtra("nbEtape", nbEtape);
                     startActivity(nextActivite);
-                }*/
+                }
                 break;
             case R.id.bouton_raz:
-                nomEvent.getText().clear();
-                motDePasse.getText().clear();
-                nombreEtape.getText().clear();
+                et_nomEvent.getText().clear();
+                et_motDePasse.getText().clear();
+                et_localite.getText().clear();
+                //mettre à zéro le spinner ?
                 break;
             case R.id.radio_public:
-                motDePasse.setVisibility(View.INVISIBLE);
+                et_motDePasse.setVisibility(View.INVISIBLE);
                 break;
             case R.id.radio_prive:
-                motDePasse.setVisibility(View.VISIBLE);
+                et_motDePasse.setVisibility(View.VISIBLE);
                 break;
             case R.id.bouton_accueil:
                 Intent eventFilActu = new Intent(this, filActu.class);

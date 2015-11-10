@@ -65,7 +65,7 @@ public class functions extends VariableGlobale{
             protected void onPostExecute(String s){
                 super.onPreExecute();
              //   loading.dismiss();
-                lv.setText(s);
+                //lv.setText(s);
             }
         }
         GetJSON gj = new GetJSON();
