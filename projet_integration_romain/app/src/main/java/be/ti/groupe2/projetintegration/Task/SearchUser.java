@@ -30,7 +30,7 @@ public class SearchUser extends AsyncTask<String, Void, String> {
     public interface CustomInterface{
         void showProgressBar();
         void hideProgressBar();
-        void showResult(String s);
+        void showResult2(String s);
 
     }
 
@@ -105,6 +105,6 @@ public class SearchUser extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         callback.hideProgressBar();
-        callback.showResult(s);
+        callback.showResult2(s);
     }
 }

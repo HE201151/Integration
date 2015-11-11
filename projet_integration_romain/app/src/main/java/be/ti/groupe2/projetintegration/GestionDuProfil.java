@@ -12,13 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import be.ti.groupe2.projetintegration.Task.Connexion;
+import be.ti.groupe2.projetintegration.Task.SearchUser;
 
-public class GestionDuProfil extends Activity implements View.OnClickListener{
+
+public class GestionDuProfil extends Activity implements View.OnClickListener,SearchUser.CustomInterface{
 
     Button accueil;
     Button event;
@@ -42,7 +46,12 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
         event.setOnClickListener(this);
         profil.setOnClickListener(this);
 
+        int id = context.getiDUser();
 
+        SearchUser task = new SearchUser(this);
+
+        task.execute(JSON_URL, String.valueOf(id));
+/*
         try {
 
 
@@ -60,6 +69,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+*/
 
 
 
@@ -82,6 +92,55 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
             case R.id.confirm:
                 change_profil();
                 break;
+        }
+    }
+
+
+    @Override
+    public void showResult2(String s) {
+        if(s.equals("-1"))
+            Toast.makeText(this, "Erreur", Toast.LENGTH_SHORT).show();
+        else {
+            //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+            /*try {
+                JSONArray result = functions.extractJson(s);
+                JSONObject jsonObject =  result.getJSONObject(0);
+                //int id = jsonObject.getInt("userID");
+                Toast.makeText(this, "id=" + id,Toast.LENGTH_SHORT).show();
+
+                functions.getJSON(JSON_URL3, lv);
+                JSONArray result1 = functions.extractJson(lv.getText().toString());
+
+                context.setiDUser(id);
+                System.out.println("Connexion réussie");
+                String events = lv.getText().toString();
+                //Toast.makeText(this, events, Toast.LENGTH_SHORT).show();
+                context.getApplicationContext();
+                System.out.println("---------------    " + context);
+                context.setListEvent(events);
+                Intent profilFilActu = new Intent(this, filActu.class);
+                startActivity(profilFilActu);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+
+            try {
+
+
+                JSONArray result = functions.extractJson(s );
+                JSONObject jsonObject = result.getJSONObject(0);
+
+
+                //EditText name = (EditText) findViewById(R.id.name);
+                //EditText firstname = (EditText) findViewById(R.id.first_name);
+
+                EditText pseudo = (EditText) findViewById(R.id.pseudo);
+
+                pseudo.setText(jsonObject.getString("userLogin"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -220,4 +279,17 @@ public class GestionDuProfil extends Activity implements View.OnClickListener{
         }
         return ok;
     }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+    @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+    }
+
+
+
+}

@@ -50,7 +50,8 @@
             android:hint="Password"
             android:layout_below="@+id/pseudo"
             android:layout_alignLeft="@+id/pseudo"
-            android:layout_alignStart="@+id/pseudo" />
+            android:layout_alignStart="@+id/pseudo"
+            android:text="essai" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -61,7 +62,8 @@
             android:hint="New_pass"
             android:layout_below="@+id/password"
             android:layout_alignLeft="@+id/password"
-            android:layout_alignStart="@+id/password" />
+            android:layout_alignStart="@+id/password"
+            android:text="essai"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -72,7 +74,8 @@
             android:hint="confirm"
             android:layout_below="@+id/new_pass"
             android:layout_alignLeft="@+id/new_pass"
-            android:layout_alignStart="@+id/new_pass" />
+            android:layout_alignStart="@+id/new_pass"
+            android:text="essai"/>
 
         <Button
             android:layout_width="wrap_content"
