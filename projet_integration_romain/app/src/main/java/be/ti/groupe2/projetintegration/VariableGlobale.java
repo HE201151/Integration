@@ -10,6 +10,7 @@ public class VariableGlobale extends Application{
     private int iDUser;
     private String listEvent;
     private static Context context;
+    private String pseudo;
 
 
 
@@ -19,6 +20,7 @@ public class VariableGlobale extends Application{
             context = getApplicationContext();
             iDUser = 0;
             listEvent = null;
+            pseudo = null ;
 
         }
     public static Context getContext(){
@@ -27,6 +29,14 @@ public class VariableGlobale extends Application{
 
     public int getiDUser() {
         return iDUser;
+    }
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo){
+        this.pseudo = pseudo;
     }
 
     public void setiDUser(int iDUser) {
