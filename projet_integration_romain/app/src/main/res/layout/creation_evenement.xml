@@ -67,20 +67,11 @@
             android:inputType="textPassword"
             android:hint="Mot de Passe"
             />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Nombre Etapes* : "
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:gravity="center"
-            />
-        <EditText
-            android:id="@+id/EditText_nombreEtape"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre Etapes"
-            />
+        <Spinner
+            android:id="@+id/sp_nbEtape"
+            android:entries="@array/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/EditText_localite"
             android:layout_width="fill_parent"

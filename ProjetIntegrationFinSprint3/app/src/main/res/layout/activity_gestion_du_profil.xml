@@ -1,0 +1,170 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Name"
+            android:ems="10"
+            android:id="@+id/name"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="FirstName"
+            android:ems="10"
+            android:id="@+id/first_name"
+            android:layout_below="@+id/name"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Pseudo"
+            android:ems="10"
+            android:id="@+id/pseudo"
+            android:layout_below="@+id/first_name"
+            android:layout_alignLeft="@+id/first_name"
+            android:layout_alignStart="@+id/first_name" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/password"
+            android:hint="Password"
+            android:layout_below="@+id/pseudo"
+            android:layout_alignLeft="@+id/pseudo"
+            android:layout_alignStart="@+id/pseudo" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/new_pass"
+            android:hint="New_pass"
+            android:layout_below="@+id/password"
+            android:layout_alignLeft="@+id/password"
+            android:layout_alignStart="@+id/password" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/confirm_pass"
+            android:hint="confirm"
+            android:layout_below="@+id/new_pass"
+            android:layout_alignLeft="@+id/new_pass"
+            android:layout_alignStart="@+id/new_pass" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:id="@+id/confirm"
+            android:layout_below="@+id/confirm_pass"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="47dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avatar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/name"
+            android:layout_toLeftOf="@+id/confirm"
+            android:layout_toStartOf="@+id/confirm"
+            android:background="#52D017"
+            android:clickable="true"
+            android:layout_above="@+id/password" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ancien mot de      passe"
+            android:id="@+id/textView"
+            android:layout_below="@+id/avatar"
+            android:layout_above="@+id/new_pass"
+            android:layout_toLeftOf="@+id/password" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nouveau mot de passe"
+            android:id="@+id/textView2"
+            android:layout_below="@+id/textView"
+            android:layout_alignRight="@+id/avatar"
+            android:layout_above="@+id/confirm_pass"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmer nouveau mot de passe"
+            android:id="@+id/textView3"
+            android:layout_alignRight="@+id/textView"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_alignBottom="@+id/confirm_pass" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@drawable/barre">
+
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_event"
+            android:background="@drawable/button_event_menu"
+            android:layout_gravity="center"
+            android:layout_marginLeft="31dp"
+            android:layout_alignTop="@+id/bouton_accueil"
+            android:layout_toStartOf="@+id/bouton_accueil" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_accueil"
+            android:background="@drawable/button_accueil_menu"
+            android:layout_marginLeft="34dp"
+            android:layout_alignTop="@+id/bouton_profil"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bouton_profil"
+            android:background="@drawable/button_profil_menu"
+            android:layout_marginLeft="33dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="71dp" />
+
+    </RelativeLayout>
+</FrameLayout>
