@@ -65,7 +65,7 @@ public class functions extends VariableGlobale{
             protected void onPostExecute(String s){
                 super.onPreExecute();
              //   loading.dismiss();
-                //lv.setText(s);
+                lv.setText(s);
             }
         }
         GetJSON gj = new GetJSON();
@@ -124,6 +124,36 @@ public class functions extends VariableGlobale{
                     name = jsonObject.getString(USERNAME);
                     firstname = jsonObject.getString(FIRSTNAME);
                     user user1 = new user(cLogin, cMdp,cId,name,firstname);
+
+                    return user1;
+                }
+                i++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public static user searchUser2(JSONArray users, boolean granted, int id){
+        int i = 0;
+        int cId;
+        String cLogin;
+        String cMdp;
+        String name;
+        String firstname;
+
+        try{
+            while(i<users.length() && !granted){
+                JSONObject jsonObject = users.getJSONObject(i);
+                cId=jsonObject.getInt(USERID);
+                if(cId==id){
+                    granted = true;
+                    cLogin = jsonObject.getString(PSEUDO);
+                    name = jsonObject.getString(USERNAME);
+                    firstname = jsonObject.getString(FIRSTNAME);
+                    user user1 = new user(cLogin,"ee",cId,name,firstname);
 
                     return user1;
                 }

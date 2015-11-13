@@ -42,13 +42,14 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
         Boolean granted = false;
         String resu;
 
-        public static  TextView lv = null;
+        public TextView lv = null;
         public static final String myJson = null;
         public static final String MY_JSON ="MY_JSON";
-        public static final String URL_CONNEXION = "http://projet_groupe2.hebfree.org//connexion3.php";
+        public static final String URL_CONNEXION = "http://projet_groupe2.hebfree.org/connexion3.php";
         private static final String ID = "userID";
 
         public static final String JSON_URL2 = "http://projet_groupe2.hebfree.org/Events.php";
+        public static final String JSON_URL3 = "http://projet_groupe2.hebfree.org/Clients.php";
         private static final String EVENTNAME = "eventName";
         private static final String USERID = "sClient";
 
@@ -82,7 +83,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
 
             context = (VariableGlobale) this.getApplicationContext();
 
-            //functions.getJSON(JSON_URL, lv);
+            functions.getJSON(JSON_URL3, lv);
 
 
             //connexion.setOnClickListener(this);
@@ -152,9 +153,16 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 //context.setiDUser(id);
 >>>>>>> origin/master
 
+<<<<<<< HEAD
                 functions.searchLogin(result, granted, login, mdp);
 
                 granted = true;
+=======
+               // granted =true;
+
+                /*if(granted) {
+                    System.out.println("Connexion réussie");
+>>>>>>> origin/master
 
                 if (granted) {
                     System.out.println("Connexion réussie");
@@ -164,12 +172,23 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                     context.setListEvent(events);
                     Intent profilFilActu = new Intent(this, filActu.class);
                     startActivity(profilFilActu);
+<<<<<<< HEAD
                 } else {
                     cError.setText("Login/mdp incorrect(s)");
                     cError.setVisibility(View.VISIBLE);
                 }
             } else if (v == inscription) {
                 //  functions.VersInscription(v);
+=======
+                }*/
+                /*else {
+                    cError.setText("Login/mdp incorrect(s)");
+                    cError.setVisibility(View.VISIBLE);
+                }*/
+            }
+            else if(v == inscription){
+              //  functions.VersInscription(v);
+>>>>>>> origin/master
             }
         }
 <<<<<<< HEAD
@@ -207,16 +226,35 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
         if(s.equals("-1"))
             Toast.makeText(this, "Login/mot de passe incorrect", Toast.LENGTH_SHORT).show();
         else {
-            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             try {
-                JSONObject jo = new JSONObject(s);
-                id = jo.getInt("userID");
-                Toast.makeText(this, "id : " + id, Toast.LENGTH_SHORT).show();
+                JSONArray result = functions.extractJson(s);
+                JSONObject jsonObject =  result.getJSONObject(0);
+                id = jsonObject.getInt("userID");
+                Toast.makeText(this, "id=" + id,Toast.LENGTH_SHORT).show();
+
+                functions.getJSON(JSON_URL3, lv);
+                JSONArray result1 = functions.extractJson(lv.getText().toString());
+
                 context.setiDUser(id);
+                System.out.println("Connexion réussie");
+                String events = lv.getText().toString();
+                //Toast.makeText(this, events, Toast.LENGTH_SHORT).show();
+                context.getApplicationContext();
+                System.out.println("---------------    " + context);
+                context.setListEvent(events);
+                Intent profilFilActu = new Intent(this, filActu.class);
+                startActivity(profilFilActu);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+<<<<<<< HEAD
+}
+>>>>>>> origin/master
+=======
+
+
 }
 >>>>>>> origin/master

@@ -58,4 +58,8 @@ public class user {
         this.name = name;
         this.first_name = first_name;
     }
+
+    public user(){
+
+    }
 }
