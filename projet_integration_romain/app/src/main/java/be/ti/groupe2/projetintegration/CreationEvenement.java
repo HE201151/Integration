@@ -96,7 +96,9 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
                 }
                 else{
                     Intent nextActivite = new Intent(CreationEvenement.this, CreationEvenementP2.class);
-                    nextActivite.putExtra("localite", localiteEvent);
+                    nextActivite.putExtra("nomEvent", nomEvent);
+                    nextActivite.putExtra("mdpEvent", mdpEvent);
+                    nextActivite.putExtra("localiteEvent", localiteEvent);
                     nextActivite.putExtra("nbEtape", nbEtape);
                     startActivity(nextActivite);
                 }

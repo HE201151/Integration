@@ -4,6 +4,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,11 +25,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreationEvenementP2 extends FragmentActivity implements View.OnClickListener{
+import be.ti.groupe2.projetintegration.Task.TaskCreationEvent;
+import be.ti.groupe2.projetintegration.Task.TaskInscription;
+import be.ti.groupe2.projetintegration.Task.UpdateProfil;
+
+public class CreationEvenementP2 extends FragmentActivity implements View.OnClickListener,TaskCreationEvent.CustomInterface{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -36,15 +45,24 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     Button btn_valideEtape = null;
     Button btn_changeType = null;
 
+
+    VariableGlobale context;
+
     EditText et_address = null;
     TextView tv_lieuSelectionne =null;
 
+    Event myEvent = new Event();
+
     int compteurMarker=1;
-    String localite="";
-    int nbEtape=0;
+
     Marker marker = null;
     ArrayList<Marker> arrayMarkerValide= new ArrayList<Marker>();
-    // ArrayList<Address> arrayAddressValide = new ArrayList<Address>();
+     ArrayList<Address> arrayAddressValide = new ArrayList<Address>();
+    JSONObject object =null;
+   // JSONArray arrayAddressValide = null;
+
+   public static final String URL_CREATIONEVENTJ= "http://192.168.0.10:8080/createEvent.php";
+    public static final String URL_CREATIONEVENT= "http://projet_groupe2.hebfree.org/creationEvent.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +70,12 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
         //Recuperation de l'intent venant de CreationEvent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            localite = extras.getString("localite");
-            nbEtape = extras.getInt("nbEtape");
-            Toast.makeText(CreationEvenementP2.this, "localite : "+localite, Toast.LENGTH_SHORT).show();
-            Toast.makeText(CreationEvenementP2.this, "nbEtape : "+ nbEtape, Toast.LENGTH_SHORT).show();
+            myEvent.setNom(extras.getString("nomEvent"));
+            myEvent.setMdp(extras.getString("mdpEvent"));
+            myEvent.setLocalite(extras.getString("localiteEvent"));
+            myEvent.setNb(extras.getInt("nbEtape"));
+            Toast.makeText(CreationEvenementP2.this, "localite : "+myEvent.localite, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreationEvenementP2.this, "nbEtape : "+ myEvent.nb, Toast.LENGTH_SHORT).show();
             //extras.getSerializable()
         }
 
@@ -67,7 +87,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
 
         btn_recherche = (Button)findViewById(R.id.btn_recherche);
         btn_valideEtape = (Button)findViewById(R.id.btn_valideEtape);
-        btn_valideEtape.setText("Valider étape 1/"+nbEtape);
+        btn_valideEtape.setText("Valider étape 1/"+myEvent.nb);
         btn_changeType = (Button)findViewById(R.id.btn_changeType);
 
         btn_recherche.setOnClickListener(this);
@@ -101,7 +121,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.aide:
-                Toast.makeText(CreationEvenementP2.this, "Menu aide putain", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreationEvenementP2.this, "Menu aide", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
@@ -137,7 +157,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
 
     private void setUpMap() {
         LatLng posLocalite;
-        posLocalite = getLatitudeLongitude(localite);
+        posLocalite = getLatitudeLongitude(myEvent.localite);
         centreCameraPosition(posLocalite);
         mMap.setMyLocationEnabled(true); // Permet de cibler la carte sur notre position
         mMap.getUiSettings().setZoomControlsEnabled(true); //Ajoute bouton Zoom en bas à droite de la carte
@@ -157,7 +177,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
                 .title("Marker")
                 .snippet("HQ")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        getLocalite(latlng.latitude,latlng.longitude);
+        getLocalite(latlng.latitude, latlng.longitude);
         //marker[0].remove();  supprimer marker
     }
 
@@ -174,16 +194,27 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     /** Cette méthode permet à l'utilisateur de sélectionner une étape suivante. **/
     private void valideEtape() {
         if (marker != null) {
-            if (compteurMarker <= nbEtape) {
+            if (compteurMarker <= myEvent.nb) {
                 marker.setTitle("Marker" + compteurMarker);
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 arrayMarkerValide.add(marker);
+               // arrayAddressValide.put(marker);
                 compteurMarker++;
-                if (compteurMarker>nbEtape){
+                if (compteurMarker>myEvent.nb){
+                  TaskCreationEvent creationEvent = new TaskCreationEvent(this);
                     Toast.makeText(CreationEvenementP2.this, "Encodage des Etapes finis! G G", Toast.LENGTH_SHORT).show();
                     //Changement d'activity ici
+                    object = new JSONObject();
+                    Event event = new Event();
+                    try {
+                        object.put("test",event);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    myEvent.setIdAuthor(context.getiDUser());
+                    creationEvent.execute(URL_CREATIONEVENTJ,myEvent.nom,myEvent.mdp,myEvent.localite,String.valueOf(myEvent.idAuthor), myEvent.description);
                 }
-                btn_valideEtape.setText("Valider étape "+compteurMarker+"/"+nbEtape);
+                btn_valideEtape.setText("Valider étape "+compteurMarker+"/"+myEvent.nb);
             }
         }else {
             Toast.makeText(CreationEvenementP2.this, "Selectionnez un lieu", Toast.LENGTH_SHORT).show();
@@ -230,5 +261,21 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
 
         tv_lieuSelectionne.setText(situation);
         return situation;
+    }
+
+
+    @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+    }
+
+    @Override
+    public void showResult3(String s) {
+
     }
 }

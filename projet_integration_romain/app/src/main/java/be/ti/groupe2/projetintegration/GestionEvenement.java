@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +68,24 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
         adapter = new ArrayAdapter<String>(this, R.layout.list, R.id.editT, list);
 
         tv.setAdapter(adapter);
+
+
+        tv.setOnItemClickListener(onListClick);
     }
+
+
+
+    private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener(){
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String g = (String) parent.getItemAtPosition(position);
+            String s = list.get(position);
+            Event e = new Event();
+            e.setNom(s);
+            context.setEvent(e);
+            Intent visuEvenement = new Intent(GestionEvenement.this, visuEvent.class);
+            startActivity(visuEvenement);
+        }
+    };
 
     @Override
     public void onClick(View v) {

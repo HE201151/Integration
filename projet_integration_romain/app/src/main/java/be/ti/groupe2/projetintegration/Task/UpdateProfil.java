@@ -18,21 +18,19 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 
-public class SearchUser extends AsyncTask<String, Void, String> {
-
+public class UpdateProfil extends AsyncTask<String, Void, String> {
     private CustomInterface callback;
     private String response = "";
-
 
 
     public interface CustomInterface{
         void showProgressBar();
         void hideProgressBar();
-        void showResult2(String s);
+        void showResult(String s);
 
     }
 
-    public SearchUser(CustomInterface callback){
+    public UpdateProfil(CustomInterface callback){
         this.callback = callback;
     }
 
@@ -48,6 +46,11 @@ public class SearchUser extends AsyncTask<String, Void, String> {
             ContentValues cv = new ContentValues();
             cv.put("id",params[1]); //grâce à put on va ajouter des données dans notre cv
 
+            cv.put("pseudo",params[2]);
+            cv.put("nom",params[3]);
+            cv.put("prenom",params[4]);
+            cv.put("pass",params[5]);
+            cv.put("mail",params[6]);
 
             URL url = new URL(params[0]); // on lui donne l'url qui est passée lors de l'execute(cf. mainactivity)
 
@@ -103,6 +106,6 @@ public class SearchUser extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         callback.hideProgressBar();
-        callback.showResult2(s);
+        callback.showResult(s);
     }
 }

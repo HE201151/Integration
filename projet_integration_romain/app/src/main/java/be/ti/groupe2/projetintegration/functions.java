@@ -19,8 +19,8 @@ public class functions extends VariableGlobale{
     private static final String MAIL = "userMail";
     private static final String PASSWORD = "userPassword";
     private static final String USERID = "userID";
-    private static final String USERNAME= "userName";
-    private static final String FIRSTNAME= "firstName";
+    private static final String USERNAME= "nom";
+    private static final String FIRSTNAME= "prenom";
 
 
 
@@ -105,7 +105,7 @@ public class functions extends VariableGlobale{
         return 0;
     }
 
-    public static user searchUser(JSONArray users, boolean granted, int id){
+ /*   public static User searchUser(JSONArray users, boolean granted, int id){
         int i = 0;
         int cId;
         String cLogin;
@@ -123,9 +123,9 @@ public class functions extends VariableGlobale{
                     cMdp = jsonObject.getString(PASSWORD);
                     name = jsonObject.getString(USERNAME);
                     firstname = jsonObject.getString(FIRSTNAME);
-                    user user1 = new user(cLogin, cMdp,cId,name,firstname);
+                    User u = new User(cLogin, cMdp,cId,name,firstname,);
 
-                    return user1;
+                    return u;
                 }
                 i++;
             }
@@ -134,35 +134,5 @@ public class functions extends VariableGlobale{
         }
         return null;
 
-    }
-
-    public static user searchUser2(JSONArray users, boolean granted, int id){
-        int i = 0;
-        int cId;
-        String cLogin;
-        String cMdp;
-        String name;
-        String firstname;
-
-        try{
-            while(i<users.length() && !granted){
-                JSONObject jsonObject = users.getJSONObject(i);
-                cId=jsonObject.getInt(USERID);
-                if(cId==id){
-                    granted = true;
-                    cLogin = jsonObject.getString(PSEUDO);
-                    name = jsonObject.getString(USERNAME);
-                    firstname = jsonObject.getString(FIRSTNAME);
-                    user user1 = new user(cLogin,"ee",cId,name,firstname);
-
-                    return user1;
-                }
-                i++;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
+    }*/
 }

@@ -2,7 +2,6 @@ package be.ti.groupe2.projetintegration.Task;
 
 import android.content.ContentValues;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,45 +12,43 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 
 
-public class SearchUser extends AsyncTask<String, Void, String> {
+public class TaskInscription extends AsyncTask<String, Void, String> {
+    private CustomInscription callback;
+    private String response="";
 
-    private CustomInterface callback;
-    private String response = "";
-
-
-
-    public interface CustomInterface{
-        void showProgressBar();
-        void hideProgressBar();
-        void showResult2(String s);
-
+    public interface CustomInscription{
+        void showProgressBarInscription();
+        void hideProgressBarInscription();
+        void showResultInscription(String s);
     }
 
-    public SearchUser(CustomInterface callback){
+    public TaskInscription(CustomInscription callback){
         this.callback = callback;
     }
 
     @Override
     protected void onPreExecute() {
-        callback.showProgressBar();
+        callback.showProgressBarInscription();
     }
 
     @Override
     protected String doInBackground(String... params) {
         try {
-            //Content value pour stocker nos informations à envoyer sous forme de <key,value>
             ContentValues cv = new ContentValues();
-            cv.put("id",params[1]); //grâce à put on va ajouter des données dans notre cv
+            cv.put("login",params[1]);
+            cv.put("pass",params[2]);
+            cv.put("cpass",params[3]);
+            cv.put("mail",params[4]);
+            cv.put("nom",params[4]);
+            cv.put("prenom",params[4]);
 
-
-            URL url = new URL(params[0]); // on lui donne l'url qui est passée lors de l'execute(cf. mainactivity)
-
-            //on ouvre une connexion en post ainsi que les input/output
+            URL url = new URL(params[0]);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setDoInput(true);
@@ -76,11 +73,13 @@ public class SearchUser extends AsyncTask<String, Void, String> {
             }
             else
                 response = "";
+
         } catch (MalformedURLException e) {
-            Log.e("URL MALFORME", e.getMessage());
+            e.printStackTrace();
         } catch (IOException e) {
-            Log.e("IO Exception",e.getMessage());
+            e.printStackTrace();
         }
+
         return response;
     }
 
@@ -102,7 +101,7 @@ public class SearchUser extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        callback.hideProgressBar();
-        callback.showResult2(s);
+        callback.hideProgressBarInscription();
+        callback.showResultInscription(s);
     }
 }

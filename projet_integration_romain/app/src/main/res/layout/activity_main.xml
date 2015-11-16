@@ -49,6 +49,13 @@
                 android:layout_gravity="center"
                 android:hint="password" />
 
+            <CheckBox
+                android:id="@+id/cb_rememberMe"
+                android:text="se souvenir de moi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
             <Button
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"

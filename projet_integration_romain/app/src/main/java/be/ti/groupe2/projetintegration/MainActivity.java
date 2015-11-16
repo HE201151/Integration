@@ -2,41 +2,33 @@ package be.ti.groupe2.projetintegration;
 
 import android.content.Intent;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ContentValues;
-import android.hardware.camera2.TotalCaptureResult;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import be.ti.groupe2.projetintegration.Task.Connexion;
-import be.ti.groupe2.projetintegration.Task.Inscription;
+import be.ti.groupe2.projetintegration.Task.TaskInscription;
 
-public class MainActivity extends Activity implements View.OnClickListener,Connexion.CustomInterface,Inscription.CustomInscription{
+
+public class MainActivity extends Activity implements View.OnClickListener,Connexion.CustomInterface,TaskInscription.CustomInscription{
 
         Button connexion;
         Button inscription;
         TextView tLogin;
         TextView tMdp;
         TextView cError;
+        CheckBox cb_rememberMe;
         String login;
         String mdp;
         Boolean granted = false;
@@ -78,6 +70,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             //tMdp =(TextView) findViewById(R.id.tMdp);
             cError = (TextView) findViewById(R.id.Error);
 
+            cb_rememberMe = (CheckBox) findViewById(R.id.cb_rememberMe);
 
             cError.setVisibility(View.INVISIBLE);
 
@@ -96,11 +89,27 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             pb_main_connexion = (ProgressBar) findViewById(R.id.pb_mainAct);
 
             btn_connexion.setOnClickListener(this);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            cb_rememberMe.setChecked(prefs.getBoolean("remember", false));
+            et_main_login.setText(prefs.getString("username", ""));
         }
 
         @Override
         public void onClick(View v) {
             if(v == btn_connexion){
+                String username = et_main_login.getText().toString();
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                if (cb_rememberMe.isChecked()) {
+                    editor.putString("username", username);
+                    editor.putBoolean("remember", true);
+                    editor.apply();
+                } else {
+                    editor.remove("username");
+                    editor.putBoolean("remember", false);
+                    editor.apply();
+                }
                 login = et_main_login.getText().toString();
                 mdp = et_main_password.getText().toString();
                 //int id;
@@ -113,7 +122,6 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }*/
-                    Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
 
                     task.execute(URL_CONNEXION,login,mdp);
                 }
@@ -150,7 +158,8 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 }*/
             }
             else if(v == inscription){
-              //  functions.VersInscription(v);
+                Intent intentInscription = new Intent(getApplicationContext(), be.ti.groupe2.projetintegration.Inscription.class);
+                startActivity(intentInscription);
             }
         }
 
@@ -190,7 +199,6 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 JSONArray result = functions.extractJson(s);
                 JSONObject jsonObject =  result.getJSONObject(0);
                 id = jsonObject.getInt("userID");
-                Toast.makeText(this, "id=" + id,Toast.LENGTH_SHORT).show();
 
                 functions.getJSON(JSON_URL3, lv);
                 JSONArray result1 = functions.extractJson(lv.getText().toString());
@@ -198,7 +206,6 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 context.setiDUser(id);
                 System.out.println("Connexion réussie");
                 String events = lv.getText().toString();
-                //Toast.makeText(this, events, Toast.LENGTH_SHORT).show();
                 context.getApplicationContext();
                 System.out.println("---------------    " + context);
                 context.setListEvent(events);
@@ -209,6 +216,4 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             }
         }
     }
-
-
 }
