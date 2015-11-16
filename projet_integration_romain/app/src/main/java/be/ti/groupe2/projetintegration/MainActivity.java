@@ -94,8 +94,33 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             cb_rememberMe.setChecked(prefs.getBoolean("remember", false));
             et_main_login.setText(prefs.getString("username", ""));
         }
+/*
+@Override
+        public void onClick(View v) {
+    if (v == connexion) {
+        login = tLogin.getText().toString();
+        mdp = tMdp.getText().toString();
+        int id;
 
+        JSONArray result = functions.extractJson(lv.getText().toString());
+
+        id = functions.searchLogin(result, granted, login, mdp);
+
+        context.setiDUser(id);
+*/
         @Override
+<<<<<<< HEAD
+        public void onClick (View v){
+            if (v == connexion) {
+                login = tLogin.getText().toString();
+                mdp = tMdp.getText().toString();
+
+                System.out.println("login : " + login);
+                System.out.println("myjson : " + myJson);
+
+
+                JSONArray result = functions.extractJson(lv.getText().toString());
+=======
         public void onClick(View v) {
             if(v == btn_connexion){
                 String username = et_main_login.getText().toString();
@@ -134,23 +159,35 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 //id=functions.searchLogin(result, granted, login, mdp);
 
                 //context.setiDUser(id);
+>>>>>>> origin/master
 
+<<<<<<< HEAD
+                functions.searchLogin(result, granted, login, mdp);
+
+                granted = true;
+=======
                // granted =true;
 
                 /*if(granted) {
                     System.out.println("Connexion réussie");
+>>>>>>> origin/master
 
-                    functions.getJSON(JSON_URL2, lv);
-                    functions.extractJson(lv.getText().toString());
+                if (granted) {
+                    System.out.println("Connexion réussie");
                     String events = lv.getText().toString();
-
                     context.getApplicationContext();
-
-                    System.out.println("---------------    "+ context);
-
+                    System.out.println("---------------    " + context);
                     context.setListEvent(events);
                     Intent profilFilActu = new Intent(this, filActu.class);
                     startActivity(profilFilActu);
+<<<<<<< HEAD
+                } else {
+                    cError.setText("Login/mdp incorrect(s)");
+                    cError.setVisibility(View.VISIBLE);
+                }
+            } else if (v == inscription) {
+                //  functions.VersInscription(v);
+=======
                 }*/
                 /*else {
                     cError.setText("Login/mdp incorrect(s)");
@@ -158,10 +195,18 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 }*/
             }
             else if(v == inscription){
+<<<<<<< HEAD
                 Intent intentInscription = new Intent(getApplicationContext(), be.ti.groupe2.projetintegration.Inscription.class);
                 startActivity(intentInscription);
+=======
+              //  functions.VersInscription(v);
+>>>>>>> origin/master
+>>>>>>> origin/master
             }
         }
+<<<<<<< HEAD
+    }
+=======
 
     @Override
     public void showProgressBarInscription() {
@@ -216,4 +261,15 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+<<<<<<< HEAD
+}
+>>>>>>> origin/master
+=======
+
+
+}
+>>>>>>> origin/master
+>>>>>>> origin/master

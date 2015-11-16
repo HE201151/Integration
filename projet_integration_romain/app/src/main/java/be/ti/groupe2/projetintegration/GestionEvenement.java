@@ -7,9 +7,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+<<<<<<< HEAD
 import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+=======
+import android.widget.TextView;
+>>>>>>> origin/master
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +35,15 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
 
     private ListView tv;
 
+    private TextView lv2;
+
+    //private static final String EVENTNAME = "eventName";
+    //private static final String USERID = "sClient";
+    public static final String JSON_URL2 = "http://projet_groupe2.hebfree.org/Events.php";
+
     private static final String EVENTNAME = "userLogin";
     private static final String USERID = "userEmail";
+
 
     List<String> list;
     ArrayAdapter<String> adapter;
@@ -48,6 +59,7 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
         profil = (Button) findViewById(R.id.bouton_profil);
         creaevent = (Button) findViewById(R.id.bouton_creationEvent);
         tv = (ListView) findViewById(R.id.tvk2);
+        lv2 = (TextView) findViewById(R.id.lv2);
 
         accueil.setOnClickListener(this);
         event.setOnClickListener(this);
@@ -56,7 +68,8 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
 
         context = (VariableGlobale) this.getApplicationContext();
 
-        user = extractJSON(user);
+
+        user = extractJSON(context.getlistEvent());
         list = new ArrayList<>();
         int length = user.length();
         System.out.println(length);
@@ -109,13 +122,14 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
         }
     }
 
-    private JSONArray extractJSON(JSONArray user2) {
+    private JSONArray extractJSON(String user2) {
+        JSONArray a= null;
         try {
-            user2 = new JSONArray(context.getlistEvent());
+            a = new JSONArray(user2);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return user2;
+        return a;
     }
 
     private void showData(int i) {

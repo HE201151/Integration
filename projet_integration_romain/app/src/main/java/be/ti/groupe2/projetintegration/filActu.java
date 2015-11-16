@@ -58,7 +58,8 @@ public class filActu extends Activity implements View.OnClickListener {
         event.setOnClickListener(this);
         profil.setOnClickListener(this);
 
-        extractJSON();
+        user = extractJSON(user);
+        System.out.println("--------" + context.getlistEvent());
         list=new ArrayList<String>();
         int length = user.length();
         System.out.println(length);
@@ -74,12 +75,13 @@ public class filActu extends Activity implements View.OnClickListener {
     }
 
 
-    private void extractJSON() {
+    private JSONArray extractJSON(JSONArray user2) {
         try {
-            user = new JSONArray(context.getlistEvent());
+            user2 = new JSONArray(context.getlistEvent());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return user2;
     }
 
     private void showData(int i) {
