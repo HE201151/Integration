@@ -32,7 +32,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
     EditText new_pass;
     EditText conf_pass;
 
-    User u;
+    user u;
 
     int id;
 
@@ -115,7 +115,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
                 JSONObject jsonObject = result.getJSONObject(0);
                 Log.i("show2", "BADABOUM");
 
-                u = new User(jsonObject.getString("userLogin"),jsonObject.getString("userPassword"),id,jsonObject.getString("nom"),jsonObject.getString("prenom"),jsonObject.getString("userEmail"));
+                u = new user(jsonObject.getString("userLogin"),jsonObject.getString("userPassword"),id,jsonObject.getString("nom"),jsonObject.getString("prenom"),jsonObject.getString("userEmail"));
 
                 Log.i("show3", " : " + u.getFirst_name());
 

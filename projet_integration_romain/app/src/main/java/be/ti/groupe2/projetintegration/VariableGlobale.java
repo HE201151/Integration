@@ -12,6 +12,7 @@ public class VariableGlobale extends Application{
     private String listActu;
     private static Context context;
     private Event e;
+    String pseudo;
 
 
 
@@ -21,16 +22,12 @@ public class VariableGlobale extends Application{
             context = getApplicationContext();
             iDUser = 0;
             listEvent = null;
-<<<<<<< HEAD
             e = null;
 
-=======
-<<<<<<< HEAD
+
             listActu = null;
-=======
+
             pseudo = null ;
->>>>>>> origin/master
->>>>>>> origin/master
 
         }
     public static Context getContext(){
@@ -53,11 +50,10 @@ public class VariableGlobale extends Application{
         this.listEvent = listEvent;
     }
 
-<<<<<<< HEAD
     public Event getEvent() {
         return e;
     }
-=======
+
     public String getlistActu() {
         return listActu;
     }
@@ -66,7 +62,7 @@ public class VariableGlobale extends Application{
         this.listActu = listActu;
     }
 
->>>>>>> origin/master
+
 
     public void setEvent(Event e) {
         this.e = e;

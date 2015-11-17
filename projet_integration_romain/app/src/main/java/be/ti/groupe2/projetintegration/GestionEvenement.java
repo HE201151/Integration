@@ -7,13 +7,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-<<<<<<< HEAD
 import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-=======
+
 import android.widget.TextView;
->>>>>>> origin/master
 
 import org.json.JSONArray;
 import org.json.JSONException;

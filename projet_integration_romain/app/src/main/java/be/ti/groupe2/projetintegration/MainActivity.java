@@ -108,19 +108,8 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
 
         context.setiDUser(id);
 */
+
         @Override
-<<<<<<< HEAD
-        public void onClick (View v){
-            if (v == connexion) {
-                login = tLogin.getText().toString();
-                mdp = tMdp.getText().toString();
-
-                System.out.println("login : " + login);
-                System.out.println("myjson : " + myJson);
-
-
-                JSONArray result = functions.extractJson(lv.getText().toString());
-=======
         public void onClick(View v) {
             if(v == btn_connexion){
                 String username = et_main_login.getText().toString();
@@ -154,18 +143,16 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                     Toast.makeText(this, "Erreur login/mot de passe incorrects", Toast.LENGTH_SHORT).show();
                 }
 
-                //JSONArray result = functions.extractJson(lv.getText().toString());
+                JSONArray result = functions.extractJson(lv.getText().toString());
 
-                //id=functions.searchLogin(result, granted, login, mdp);
+                id=functions.searchLogin(result, granted, login, mdp);
 
-                //context.setiDUser(id);
->>>>>>> origin/master
+                context.setiDUser(id);
 
-<<<<<<< HEAD
                 functions.searchLogin(result, granted, login, mdp);
 
                 granted = true;
-=======
+
                // granted =true;
 
                 /*if(granted) {
@@ -195,18 +182,15 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
                 }*/
             }
             else if(v == inscription){
-<<<<<<< HEAD
                 Intent intentInscription = new Intent(getApplicationContext(), be.ti.groupe2.projetintegration.Inscription.class);
                 startActivity(intentInscription);
-=======
+
               //  functions.VersInscription(v);
->>>>>>> origin/master
->>>>>>> origin/master
+
             }
         }
-<<<<<<< HEAD
-    }
-=======
+
+
 
     @Override
     public void showProgressBarInscription() {
@@ -261,15 +245,4 @@ public class MainActivity extends Activity implements View.OnClickListener,Conne
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-<<<<<<< HEAD
-}
->>>>>>> origin/master
-=======
-
-
-}
->>>>>>> origin/master
->>>>>>> origin/master

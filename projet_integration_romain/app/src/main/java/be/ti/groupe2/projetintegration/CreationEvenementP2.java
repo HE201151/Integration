@@ -212,6 +212,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
                         e.printStackTrace();
                     }
                     myEvent.setIdAuthor(context.getiDUser());
+                    Toast.makeText(this, "ENVOI REQUETE", Toast.LENGTH_SHORT).show();
                     creationEvent.execute(URL_CREATIONEVENTJ,myEvent.nom,myEvent.mdp,myEvent.localite,String.valueOf(myEvent.idAuthor), myEvent.description);
                 }
                 btn_valideEtape.setText("Valider étape "+compteurMarker+"/"+myEvent.nb);

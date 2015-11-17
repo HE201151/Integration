@@ -12,8 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-
+import android.widget.Toast;
 
 
 public class CreationEvenement  extends Activity implements View.OnClickListener {
@@ -100,6 +99,7 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
                     nextActivite.putExtra("mdpEvent", mdpEvent);
                     nextActivite.putExtra("localiteEvent", localiteEvent);
                     nextActivite.putExtra("nbEtape", nbEtape);
+                    Toast.makeText(this, "CLICK", Toast.LENGTH_SHORT).show();
                     startActivity(nextActivite);
                 }
                 break;
