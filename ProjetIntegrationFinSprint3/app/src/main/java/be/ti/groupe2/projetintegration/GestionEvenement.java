@@ -2,14 +2,14 @@ package be.ti.groupe2.projetintegration;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +18,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestionEvenement extends Activity implements View.OnClickListener {
+import be.ti.groupe2.projetintegration.Task.ConnEventParticip;
+
+public class GestionEvenement extends Activity implements View.OnClickListener ,ConnEventParticip.CustomInterface{
 
     VariableGlobale context;
 
@@ -31,13 +33,23 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
 
     private ListView tv;
 
-    private static final String EVENTNAME = "userLogin";
-    private static final String USERID = "userEmail";
+    public static final String USER = "IdUser";
+    public static final String NOM = "IdEvent";
+    public static final String E = "eventID";
+    public static final String USERE = "userID";
+    public static final String NOME = "eventName";
+    public static final String LOC = "localite";
+    public static final String DES = "description";
+    public static final String NB = "nbEtape";
+
+    public static final String URL = "http://projet_groupe2.hebfree.org/Particip.php";
 
     List<String> list;
+    List<Event> listE;
+    List<String> affiche;
     ArrayAdapter<String> adapter;
 
-    JSONArray user;
+    JSONArray eventList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,24 +68,14 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
 
         context = (VariableGlobale) this.getApplicationContext();
 
-        user = extractJSON(user);
-        list = new ArrayList<>();
-        int length = user.length();
-        System.out.println(length);
-        length = length - 1;
-        while (length >= 0) {
-            showData(length);
-            length--;
-        }
-        adapter = new ArrayAdapter<String>(this, R.layout.list, R.id.editT, list);
+        ConnEventParticip connEventParticip = new ConnEventParticip(this);
+        int id = context.getiDUser();
+        System.out.println("------" + context.getlistEvent());
 
-        tv.setAdapter(adapter);
+        connEventParticip.execute(URL, Integer.toString(id));
 
 
-        tv.setOnItemClickListener(onListClick);
     }
-
-
 
     private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener(){
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -82,7 +84,7 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
             Event e = new Event();
             e.setNom(s);
             context.setEvent(e);
-            Intent visuEvenement = new Intent(GestionEvenement.this, visuEvent.class);
+            Intent visuEvenement = new Intent(GestionEvenement.this, VisuEvent.class);
             startActivity(visuEvenement);
         }
     };
@@ -91,7 +93,7 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bouton_accueil:
-                Intent gestionEventFilActu = new Intent(this, filActu.class);
+                Intent gestionEventFilActu = new Intent(this, FilActu.class);
                 startActivity(gestionEventFilActu);
                 break;
             case R.id.bouton_event:
@@ -109,26 +111,93 @@ public class GestionEvenement extends Activity implements View.OnClickListener {
         }
     }
 
-    private JSONArray extractJSON(JSONArray user2) {
+    private JSONArray extractJSON(JSONArray event, String s) {
         try {
-            user2 = new JSONArray(context.getlistEvent());
+            event = new JSONArray(s);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return user2;
+        return event;
     }
 
-    private void showData(int i) {
+    private void showData(int i, JSONArray j) {
         try {
-            JSONObject jsonObject = user.getJSONObject(i);
-            list.add((jsonObject.getString(EVENTNAME)) + "   ");
-            if (jsonObject.getString(USERID).equals(context.getiDUser())) {
-                list.add(edit);
+            JSONObject jsonObject = j.getJSONObject(i);
+            if (i%2 ==0){
+                tv.setBackgroundColor(Color.parseColor("#F1F8E9"));
+            }else{
+                tv.setBackgroundColor(Color.parseColor("#000000"));
+            }
+            list.add((jsonObject.getString(NOM)));
 
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showData2(int i,JSONArray j) {
+        int k = j.length();
+        k--;
+        Event ev = new Event();
+        while(k>=0) {
+            try {
+                JSONObject jsonObject = j.getJSONObject(k);
+                if (list.get(i).equals(jsonObject.getString(E))) {
+                    ev.setNom(jsonObject.getString(NOME));
+                    Toast.makeText(this, jsonObject.getString(NOME), Toast.LENGTH_SHORT).show();
+                    ev.setDescription(jsonObject.getString(DES));
+                    ev.setLocalite(jsonObject.getString(LOC));
+                    ev.setNb(jsonObject.getInt(NB));
+                    affiche.add((ev.getNom()));
+                    listE.add(ev);
+                }
+                else{
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
 
             }
-        }catch(JSONException e){
-                e.printStackTrace();
+            k--;
+        }
+    }
+
+    @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+    }
+
+    public void showResultat(String s) {
+        if(s.equals("-1"))
+            Toast.makeText(this, "Erreur",
+                    Toast.LENGTH_SHORT).show();
+        else {
+            Toast.makeText(this, "OK",
+                    Toast.LENGTH_SHORT).show();
+            context.setListEventParticip(s);
+            eventList = extractJSON(eventList,
+                    context.getlistEventParticip());
+            list = new ArrayList<>();
+            int length = eventList.length();
+            length = length - 1;
+            while (length >= 0) {
+                showData(length,eventList);
+                length--;
+            }
+
+            System.out.println ("-----kkkkk-----"+listE);
+            adapter = new ArrayAdapter<String>(this,
+                    R.layout.list, R.id.editT, list);
+            tv.setAdapter(adapter);
+            tv.setOnItemClickListener(onListClick);
         }
     }
 }

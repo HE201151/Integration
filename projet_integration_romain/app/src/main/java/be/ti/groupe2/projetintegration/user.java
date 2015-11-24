@@ -2,7 +2,7 @@ package be.ti.groupe2.projetintegration;
 
 
 
-public class user {
+public class User {
     private String pseudo;
     private String pass;
     private int id;
@@ -10,7 +10,7 @@ public class user {
     private String first_name;
     private String mail;
 
-    public user() {
+    public User() {
 
         this.pseudo = null;
         this.pass = null;
@@ -20,7 +20,7 @@ public class user {
         this.mail = null;
     }
 
-    public user(String pseudo, String pass, int id, String name, String first_name, String mail) {
+    public User(String pseudo, String pass, int id, String name, String first_name, String mail) {
 
         this.pseudo = pseudo;
         this.pass = pass;

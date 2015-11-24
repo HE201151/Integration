@@ -6,7 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:background="@color/LightGreen200">
 
 
         <LinearLayout
@@ -34,11 +35,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="Login"
+                android:hint="Pseudo"
                 android:ems="10"
                 android:id="@+id/tLogin"
                 android:layout_gravity="center_horizontal|top"
-                android:password="false" />
+                android:password="false"
+                android:paddingLeft="10dp"/>
 
             <EditText
                 android:layout_width="wrap_content"
@@ -47,7 +49,15 @@
                 android:ems="10"
                 android:id="@+id/tMdp"
                 android:layout_gravity="center"
-                android:hint="password" />
+                android:hint="Mot de passe"
+                android:paddingLeft="10dp"/>
+
+            <CheckBox
+                android:id="@+id/cb_rememberMe"
+                android:text="se souvenir de moi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
 
             <Button
                 android:layout_width="140dp"
@@ -82,16 +92,6 @@
                 android:layout_centerHorizontal="true"/>
 
         </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/barre">
-
-
-
     </RelativeLayout>
 
 </FrameLayout>

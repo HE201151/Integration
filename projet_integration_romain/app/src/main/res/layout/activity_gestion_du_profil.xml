@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/LightGreen200">
 
 
     <RelativeLayout
@@ -15,6 +16,7 @@
             android:hint="Name"
             android:ems="10"
             android:id="@+id/nameProfil"
+            android:paddingLeft="10dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -26,6 +28,7 @@
             android:hint="FirstName"
             android:ems="10"
             android:id="@+id/first_nameProfil"
+            android:paddingLeft="10dp"
             android:layout_below="@+id/nameProfil"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -37,6 +40,7 @@
             android:hint="Pseudo"
             android:ems="10"
             android:id="@+id/pseudoProfil"
+            android:paddingLeft="10dp"
             android:layout_below="@+id/first_nameProfil"
             android:layout_alignLeft="@+id/first_nameProfil"
             android:layout_alignStart="@+id/first_nameProfil" />
@@ -44,10 +48,10 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/passwordProfil"
-            android:hint="Password"
+            android:id="@+id/mailProfil"
+            android:paddingLeft="10dp"
+            android:hint="Mail"
             android:layout_below="@+id/pseudoProfil"
             android:layout_alignLeft="@+id/pseudoProfil"
             android:layout_alignStart="@+id/pseudoProfil" />
@@ -57,11 +61,23 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
+            android:id="@+id/passwordProfil"
+            android:paddingLeft="10dp"
+            android:hint="Password"
+            android:layout_below="@+id/mailProfil"
+            android:layout_alignStart="@+id/new_passProfil" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
             android:id="@+id/new_passProfil"
+            android:paddingLeft="10dp"
             android:hint="New_pass"
-            android:layout_below="@+id/passwordProfil"
-            android:layout_alignLeft="@+id/passwordProfil"
-            android:layout_alignStart="@+id/passwordProfil" />
+            android:layout_below="@+id/mailProfil"
+            android:layout_alignStart="@+id/confirm_passProfil"
+            android:layout_marginTop="39dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -69,10 +85,10 @@
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/confirm_passProfil"
+            android:paddingLeft="10dp"
             android:hint="confirm"
             android:layout_below="@+id/new_passProfil"
-            android:layout_alignLeft="@+id/new_passProfil"
-            android:layout_alignStart="@+id/new_passProfil" />
+            android:layout_alignStart="@+id/mailProfil" />
 
         <Button
             android:layout_width="wrap_content"
@@ -92,38 +108,39 @@
             android:layout_alignTop="@+id/nameProfil"
             android:layout_toLeftOf="@+id/confirmProfil"
             android:layout_toStartOf="@+id/confirmProfil"
-            android:background="#52D017"
+            android:background="@drawable/profil"
             android:clickable="true"
             android:layout_above="@+id/passwordProfil" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ancien mot de      passe"
+            android:text="Ancien mot de passe"
             android:id="@+id/textView"
             android:layout_below="@+id/avatarProfil"
-            android:layout_above="@+id/new_passProfil"
-            android:layout_toLeftOf="@+id/passwordProfil" />
+            android:layout_toLeftOf="@+id/passwordProfil"
+            android:layout_above="@+id/textView2" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nouveau mot de passe"
             android:id="@+id/textView2"
-            android:layout_below="@+id/textView"
             android:layout_alignRight="@+id/avatarProfil"
             android:layout_above="@+id/confirm_passProfil"
             android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView" />
+            android:layout_alignStart="@+id/textView"
+            android:layout_alignTop="@+id/new_passProfil" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirmer nouveau mot de passe"
             android:id="@+id/textView3"
-            android:layout_alignRight="@+id/textView"
+            android:layout_below="@+id/new_passProfil"
+            android:layout_alignBottom="@+id/confirm_passProfil"
             android:layout_alignEnd="@+id/textView"
-            android:layout_alignBottom="@+id/confirm_passProfil" />
+            android:layout_alignStart="@+id/textView2" />
 
     </RelativeLayout>
 

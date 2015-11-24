@@ -2,48 +2,23 @@ package be.ti.groupe2.projetintegration;
 
 public class Event {
 
-    String nom;
-    int nb;
-    int idAuthor;
-    String description;
-    String localite;
-
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
-
-    public int getIdAuthor() {
-        return idAuthor;
-    }
-
-    public void setIdAuthor(int idAuthor) {
-        this.idAuthor = idAuthor;
-    }
-
-    public String getLocalite() {
-        return localite;
-    }
-
-    public void setLocalite(String localité) {
-        this.localite = localité;
-    }
-
-    String mdp;
-
-
+    private String nom;
+    private String description;
+    private int nb;
+    private int autor;
+    private String localite;
+    private String mdp;
 
 
     public Event(){
+        this.autor = 1;
         this.description = "test";
         this.nb = 1;
         this.nom = "test";
     }
 
-    public Event (String nom ,String description, int nb ,String autor){
+    public Event (String nom ,String description, int nb ,int autor){
+        this.autor = autor;
         this.description = description;
         this.nb = nb;
         this.nom = nom;
@@ -73,5 +48,27 @@ public class Event {
         this.nb = nb;
     }
 
+    public int getAutor() {
+        return autor;
+    }
 
+    public void setAutor(int autor) {
+        this.autor = autor;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localité) {
+        this.localite = localité;
+    }
+
+    public String getMdp() {
+        return mdp;
+    }
+
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
 }

@@ -13,15 +13,14 @@ import java.net.URL;
 
 
 
-public class functions extends VariableGlobale{
+public class Functions extends VariableGlobale {
 
-    private static final String PSEUDO= "userLogin";
+    private static final String PSEUDO = "userLogin";
     private static final String MAIL = "userMail";
     private static final String PASSWORD = "userPassword";
     private static final String USERID = "userID";
-    private static final String USERNAME= "nom";
-    private static final String FIRSTNAME= "prenom";
-
+    private static final String USERNAME = "nom";
+    private static final String FIRSTNAME = "prenom";
 
 
     static String ev;
@@ -35,7 +34,7 @@ public class functions extends VariableGlobale{
                 String uri = params[0];
 
                 BufferedReader bufferedReader = null;
-                try{
+                try {
                     URL url = new URL(uri);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
@@ -43,28 +42,28 @@ public class functions extends VariableGlobale{
                     bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                     String json;
-                    while((json = bufferedReader.readLine()) != null){
-                        sb.append(json+"\n");
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json + "\n");
                     }
                     System.out.println("CA MARCHE LE N'INTENET");
 
                     return sb.toString().trim();
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("CA MARCHE PAS LE N'INTENET");
                     return null;
                 }
             }
 
             @Override
-            protected void onPreExecute(){
+            protected void onPreExecute() {
                 super.onPreExecute();
-               //loading = ProgressDialog.show(this,"Loading","Please wait...");
+                //loading = ProgressDialog.show(this,"Loading","Please wait...");
             }
 
             @Override
-            protected void onPostExecute(String s){
+            protected void onPostExecute(String s) {
                 super.onPreExecute();
-             //   loading.dismiss();
+                //   loading.dismiss();
                 lv.setText(s);
             }
         }
@@ -72,8 +71,8 @@ public class functions extends VariableGlobale{
         gj.execute(url);
     }
 
-    public static JSONArray extractJson(String myJson){
-        try{
+    public static JSONArray extractJson(String myJson) {
+        try {
             JSONArray users = new JSONArray(myJson);
             return users;
         } catch (JSONException e) {
@@ -82,18 +81,18 @@ public class functions extends VariableGlobale{
         return null;
     }
 
-    public static int searchLogin(JSONArray users, boolean granted, String login, String mdp){
+    public static int searchLogin(JSONArray users, boolean granted, String login, String mdp) {
         int i = 0;
         String cLogin;
         String cMdp;
         int id;
-        try{
-            while(i<users.length() && !granted){
+        try {
+            while (i < users.length() && !granted) {
                 JSONObject jsonObject = users.getJSONObject(i);
                 cLogin = jsonObject.getString(PSEUDO);
                 cMdp = jsonObject.getString(PASSWORD);
-                id=jsonObject.getInt(USERID);
-                if(cLogin.equals(login) && cMdp.equals(mdp)){
+                id = jsonObject.getInt(USERID);
+                if (cLogin.equals(login) && cMdp.equals(mdp)) {
                     granted = true;
                     return id;
                 }
@@ -104,35 +103,4 @@ public class functions extends VariableGlobale{
         }
         return 0;
     }
-
- /*   public static User searchUser(JSONArray users, boolean granted, int id){
-        int i = 0;
-        int cId;
-        String cLogin;
-        String cMdp;
-        String name;
-        String firstname;
-
-        try{
-            while(i<users.length() && !granted){
-                JSONObject jsonObject = users.getJSONObject(i);
-                cId=jsonObject.getInt(USERID);
-                if(cId==id){
-                    granted = true;
-                    cLogin = jsonObject.getString(PSEUDO);
-                    cMdp = jsonObject.getString(PASSWORD);
-                    name = jsonObject.getString(USERNAME);
-                    firstname = jsonObject.getString(FIRSTNAME);
-                    User u = new User(cLogin, cMdp,cId,name,firstname,);
-
-                    return u;
-                }
-                i++;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }*/
 }

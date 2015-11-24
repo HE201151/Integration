@@ -9,21 +9,29 @@ public class VariableGlobale extends Application{
 
     private int iDUser;
     private String listEvent;
+    private String listEventParticip;
     private static Context context;
     private Event e;
+    private String pass;
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        context = getApplicationContext();
+        iDUser = 0;
+        listEvent = null;
+        e = null;
 
 
-
-        @Override
-        public void onCreate(){
-            super.onCreate();
-            context = getApplicationContext();
-            iDUser = 0;
-            listEvent = null;
-            e = null;
-
-
-        }
+    }
     public static Context getContext(){
         return context;
     }
@@ -42,6 +50,14 @@ public class VariableGlobale extends Application{
 
     public void setListEvent(String listEvent) {
         this.listEvent = listEvent;
+    }
+
+    public String getlistEventParticip() {
+        return listEventParticip;
+    }
+
+    public void setListEventParticip(String listEvent) {
+        this.listEventParticip = listEvent;
     }
 
     public Event getEvent() {

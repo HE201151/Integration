@@ -1,6 +1,5 @@
 package be.ti.groupe2.projetintegration;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class visuEvent extends Activity implements View.OnClickListener {
+public class VisuEvent extends Activity implements View.OnClickListener {
+
     VariableGlobale context;
 
     Button accueil;
@@ -19,7 +19,6 @@ public class visuEvent extends Activity implements View.OnClickListener {
     TextView nb;
     TextView autor;
     TextView descrip;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,7 @@ public class visuEvent extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bouton_accueil:
-                Intent gestionEventFilActu = new Intent(this, filActu.class);
+                Intent gestionEventFilActu = new Intent(this, FilActu.class);
                 startActivity(gestionEventFilActu);
                 break;
             case R.id.bouton_event:

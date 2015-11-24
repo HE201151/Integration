@@ -412,7 +412,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         // Note: For compatibility with legacy clients of volley, this implementation must remain
         // here instead of simply calling the getBody() function because this function must
         // call getPostParams() and getPostParamsEncoding() since legacy clients would have
-        // overridden these two member functions for POST requests.
+        // overridden these two member Functions for POST requests.
         Map<String, String> postParams = getPostParams();
         if (postParams != null && postParams.size() > 0) {
             return encodeParameters(postParams, getPostParamsEncoding());

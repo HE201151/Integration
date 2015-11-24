@@ -1,33 +1,60 @@
 <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/LightGreen200">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="CHOIX ETAPES "
+        android:textStyle="bold"
+        android:textColor="@color/LightGreen700"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:layout_width="131dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/et_adresse"
-            android:hint="Adresse" />
-        <Button
-            android:layout_width="119dp"
-            android:layout_height="62dp"
-            android:text="Recherche"
-            android:id="@+id/btn_recherche" />
+            android:hint="Recherche Adresse"
+
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+
+            android:layout_weight="3"
+            android:layout_gravity="left" />
+
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="135dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Change type"
             android:id="@+id/btn_changeType"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:layout_weight="1" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Valider étape"
+            android:id="@+id/btn_valideEtape"
+            android:gravity="center" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="488dp">
+        android:layout_height="fill_parent">
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -38,22 +65,5 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
 
-        <TextView
-            android:id="@+id/tv_lieuSelectionne"
-            android:text="Lieu sélectionné"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="0.90" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Valider étape"
-            android:id="@+id/btn_valideEtape" />
-    </LinearLayout>
 </LinearLayout>

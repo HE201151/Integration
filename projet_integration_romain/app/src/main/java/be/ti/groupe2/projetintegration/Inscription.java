@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import be.ti.groupe2.projetintegration.Task.TaskInscription;
 
 public class Inscription extends Activity implements TaskInscription.CustomInscription, View.OnClickListener {
@@ -31,10 +35,13 @@ public class Inscription extends Activity implements TaskInscription.CustomInscr
     String sNom = "";
     String sPrenom = "";
 
-    public static final String URL_INSCRIPTIONJ= "http://192.168.0.10:8080/inscription2.php";
-    public static final String URL_INSCRIPTION= "http://projet_groupe2.hebfree.org/inscription2.php";
+    String mdpSafe;
+
+    public static final String URL_INSCRIPTION= "http://projet_groupe2.hebfree.org/inscription3.php";
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
         //afficher GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inscription);
@@ -67,12 +74,28 @@ public class Inscription extends Activity implements TaskInscription.CustomInscr
                 TaskInscription inscription = new TaskInscription(this);
 
                 if((sLogin!=null && !sLogin.equals("")) && (sMdp!=null && !sMdp.equals(""))
-                        && (sCMdp!=null && !sCMdp.equals("")) && (sMail!=null && !sMail.equals(""))){
+                        && (sCMdp != null && !sCMdp.equals("")) && (sMail!=null && !sMail.equals(""))){
 
                     if(sMdp.equals(sCMdp)){
-                        inscription.execute(URL_INSCRIPTIONJ,sLogin,sMdp,sCMdp,sMail,sNom,sPrenom);
-                        Intent mainActivity = new Intent(this, MainActivity.class);
-                        startActivity(mainActivity);
+
+                        MessageDigest md = null;
+                        try {
+                            md = MessageDigest.getInstance("SHA-256");
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            md.update(sMdp.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        byte[] digestMdp = md.digest();
+
+                        mdpSafe = new String(digestMdp);
+
+                        inscription.execute(URL_INSCRIPTION, sLogin, mdpSafe, sCMdp, sMail, sNom, sPrenom);
+
                     }
                     else
                         Toast.makeText(this, "MDP pas égales", Toast.LENGTH_SHORT).show();
@@ -97,7 +120,17 @@ public class Inscription extends Activity implements TaskInscription.CustomInscr
 
     @Override
     public void showResultInscription(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        if(s.equals("-1")){
+            Toast.makeText(this, "Utilisateur déjà présent", Toast.LENGTH_SHORT).show();
+        }
+        else if(s.equals("-2")){
+            Toast.makeText(this, "Mail déjà enregistré", Toast.LENGTH_SHORT).show();
+        }
+        else if(s.equals("-3")){
+            Toast.makeText(this, "Utilisateur ajouté", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
 
     }
 }

@@ -5,10 +5,13 @@ import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,14 +37,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.ti.groupe2.projetintegration.Task.TaskCreationEvent;
-import be.ti.groupe2.projetintegration.Task.TaskInscription;
-import be.ti.groupe2.projetintegration.Task.UpdateProfil;
+import be.ti.groupe2.projetintegration.Task.TaskEnvoieCoordonnee;
+import be.ti.groupe2.projetintegration.Task.TaskEnvoieLatLng;
 
-public class CreationEvenementP2 extends FragmentActivity implements View.OnClickListener,TaskCreationEvent.CustomInterface{
+public class CreationEvenementP2 extends FragmentActivity implements View.OnClickListener,GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, TaskCreationEvent.CustomCreationEvent,TaskEnvoieCoordonnee.CustomEnvoieCoordonnee,TaskEnvoieLatLng.CustomEnvoieLatLng{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
-    Button btn_recherche = null;
+
     Button btn_valideEtape = null;
     Button btn_changeType = null;
 
@@ -49,65 +52,102 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     VariableGlobale context;
 
     EditText et_address = null;
-    TextView tv_lieuSelectionne =null;
+
 
     Event myEvent = new Event();
 
     int compteurMarker=1;
 
+
+    String localiteEvent="";
+    String nomEvent="";
+    String descriptionEvent="";
+    String mdpEvent="";
+
+    int nbEtape=0;
+
+    int i=0;
+
+    String eventId;
+
     Marker marker = null;
-    ArrayList<Marker> arrayMarkerValide= new ArrayList<Marker>();
-     ArrayList<Address> arrayAddressValide = new ArrayList<Address>();
+    LatLng latlng ;
+    ArrayList<LatLng> arrayAddressValide = new ArrayList<LatLng>();
     JSONObject object =null;
-   // JSONArray arrayAddressValide = null;
+    // JSONArray arrayAddressValide = null;
 
-   public static final String URL_CREATIONEVENTJ= "http://192.168.0.10:8080/createEvent.php";
-    public static final String URL_CREATIONEVENT= "http://projet_groupe2.hebfree.org/creationEvent.php";
 
+    public static final String URL_CREATIONEVENT= "http://projet_groupe2.hebfree.org/coordGoogle.php";
+    public static final String URL_CREATIONEVENT2= "http://projet_groupe2.hebfree.org/creationEvent.php";
+    public static final String URL_CREATIONEVENT3= "http://projet_groupe2.hebfree.org/envoieLatLng.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Recuperation de l'intent venant de CreationEvent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            localiteEvent = extras.getString("localiteEvent");
+            nbEtape = extras.getInt("nbEtape");
+            nomEvent = extras.getString("nomEvent");
+            descriptionEvent = extras.getString("descriptionEvent");
+            mdpEvent = extras.getString("mdpEvent");
+            Toast.makeText(CreationEvenementP2.this, "localite : "+localiteEvent, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreationEvenementP2.this, "nbEtape : "+ nbEtape, Toast.LENGTH_SHORT).show();
+            //extras.getSerializable()
+        }
+
+
+      /* Bundle extras = getIntent().getExtras();
+        if (extras != null) {
             myEvent.setNom(extras.getString("nomEvent"));
             myEvent.setMdp(extras.getString("mdpEvent"));
             myEvent.setLocalite(extras.getString("localiteEvent"));
             myEvent.setNb(extras.getInt("nbEtape"));
-            Toast.makeText(CreationEvenementP2.this, "localite : "+myEvent.localite, Toast.LENGTH_SHORT).show();
-            Toast.makeText(CreationEvenementP2.this, "nbEtape : "+ myEvent.nb, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreationEvenementP2.this, "localite : "+myEvent.getLocalite(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreationEvenementP2.this, "nbEtape : "+ myEvent.getNb(), Toast.LENGTH_SHORT).show();
             //extras.getSerializable()
-        }
+        }*/
 
         setContentView(R.layout.activity_creation_evenement_p2);
         setUpMapIfNeeded();
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
 
         et_address = (EditText)findViewById(R.id.et_adresse);
-        tv_lieuSelectionne = (TextView) findViewById(R.id.tv_lieuSelectionne);
 
-        btn_recherche = (Button)findViewById(R.id.btn_recherche);
         btn_valideEtape = (Button)findViewById(R.id.btn_valideEtape);
-        btn_valideEtape.setText("Valider étape 1/"+myEvent.nb);
+        btn_valideEtape.setText("Valider étape 1/"+nbEtape);
         btn_changeType = (Button)findViewById(R.id.btn_changeType);
 
-        btn_recherche.setOnClickListener(this);
+
         btn_changeType.setOnClickListener(this);
         btn_valideEtape.setOnClickListener(this);
 
-        //mMap.setOnMapClickListener();
+        et_address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    rechercheLocalite();
+
+                    //enlever le clavier
+                    InputMethodManager imm = (InputMethodManager) getSystemService(
+                            INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
 
     }
-    /*@Override
-    public void onMapClick(LatLng point) {
-        Toast.makeText(CreationEvenementP2.this, "je clique", Toast.LENGTH_SHORT).show();
- 
-    }*/
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
     }
 
     @Override
@@ -130,9 +170,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_recherche:
-                rechercheLocalite();
-                break;
+
             case R.id.btn_changeType:
                 changeType();
                 break;
@@ -157,7 +195,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
 
     private void setUpMap() {
         LatLng posLocalite;
-        posLocalite = getLatitudeLongitude(myEvent.localite);
+        posLocalite = getLatitudeLongitude(localiteEvent);
         centreCameraPosition(posLocalite);
         mMap.setMyLocationEnabled(true); // Permet de cibler la carte sur notre position
         mMap.getUiSettings().setZoomControlsEnabled(true); //Ajoute bouton Zoom en bas à droite de la carte
@@ -168,7 +206,7 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
         LatLng latlng;
         String location = et_address.getText().toString();
         latlng = getLatitudeLongitude(location);
-        // centreCameraPosition(latlng);
+        centreCameraPosition(latlng);
         if ((marker != null) && (marker.getTitle().equals("Marker"))){
             marker.remove();
         }
@@ -177,7 +215,9 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
                 .title("Marker")
                 .snippet("HQ")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        getLocalite(latlng.latitude, latlng.longitude);
+
+        et_address.setText(getLocalite(latlng.latitude, latlng.longitude));
+
         //marker[0].remove();  supprimer marker
     }
 
@@ -194,28 +234,40 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     /** Cette méthode permet à l'utilisateur de sélectionner une étape suivante. **/
     private void valideEtape() {
         if (marker != null) {
-            if (compteurMarker <= myEvent.nb) {
+            if (compteurMarker <= nbEtape) {
                 marker.setTitle("Marker" + compteurMarker);
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                arrayMarkerValide.add(marker);
-               // arrayAddressValide.put(marker);
+
+                arrayAddressValide.add(latlng);
+                Toast.makeText(CreationEvenementP2.this, arrayAddressValide.get(0).toString(), Toast.LENGTH_SHORT).show();
+
+
                 compteurMarker++;
-                if (compteurMarker>myEvent.nb){
-                  TaskCreationEvent creationEvent = new TaskCreationEvent(this);
+                if (compteurMarker>nbEtape){
+                    TaskCreationEvent creationEvent = new TaskCreationEvent(this);
                     Toast.makeText(CreationEvenementP2.this, "Encodage des Etapes finis! G G", Toast.LENGTH_SHORT).show();
                     //Changement d'activity ici
-                    object = new JSONObject();
-                    Event event = new Event();
-                    try {
-                        object.put("test",event);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+                   String idAuteur = "3";
+                    Toast.makeText(CreationEvenementP2.this, "idAuteur : "+idAuteur, Toast.LENGTH_SHORT).show();
+                    String SnbEtape = Integer.toString(nbEtape);
+                    creationEvent.execute(URL_CREATIONEVENT,nomEvent,mdpEvent,localiteEvent,descriptionEvent,idAuteur,SnbEtape);
+                    TaskEnvoieCoordonnee envoieCoordonnee = new TaskEnvoieCoordonnee(this);
+                    envoieCoordonnee.execute(URL_CREATIONEVENT2,idAuteur,nomEvent);
+
+
+                    for (i=0;i<nbEtape;i++){
+                        TaskEnvoieLatLng envoieLatLng = new TaskEnvoieLatLng(this);
+                        String lat = Double.toString(arrayAddressValide.get(i).latitude);
+                        String lng = Double.toString(arrayAddressValide.get(i).longitude);
+                        envoieLatLng.execute(URL_CREATIONEVENT3,lat,lng,eventId);
+                        //envoieLatLng.cancel(true);
                     }
-                    myEvent.setIdAuthor(context.getiDUser());
-                    Toast.makeText(this, "ENVOI REQUETE", Toast.LENGTH_SHORT).show();
-                    creationEvent.execute(URL_CREATIONEVENTJ,myEvent.nom,myEvent.mdp,myEvent.localite,String.valueOf(myEvent.idAuthor), myEvent.description);
+
+
+                    Toast.makeText(CreationEvenementP2.this, "en principe c'est rajouté en bdd", Toast.LENGTH_SHORT).show();
                 }
-                btn_valideEtape.setText("Valider étape "+compteurMarker+"/"+myEvent.nb);
+                btn_valideEtape.setText("Valider étape "+compteurMarker+"/"+nbEtape);
             }
         }else {
             Toast.makeText(CreationEvenementP2.this, "Selectionnez un lieu", Toast.LENGTH_SHORT).show();
@@ -227,13 +279,13 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
     {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
         mMap.animateCamera(CameraUpdateFactory.zoomIn());// Zoom in
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(7), 2000, null); //Dézoom de lvl 7 pendant 2 sec
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null); //Dézoom de lvl 7 pendant 2 sec
     }
 
     /** Méthode qui permet de trouver un lieu en fonction de ce que l'utilisateur écrit dans le champ adresse. **/
     private LatLng getLatitudeLongitude(String localite) {
         List<Address> addressList = null;
-        LatLng latlng = null;
+
         if (localite != null || localite.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -260,23 +312,76 @@ public class CreationEvenementP2 extends FragmentActivity implements View.OnClic
         Address address = addressList.get(0);
         situation = address.getAddressLine(0);
 
-        tv_lieuSelectionne.setText(situation);
+
         return situation;
     }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Toast.makeText(CreationEvenementP2.this, "Click", Toast.LENGTH_SHORT).show();
+
+        centreCameraPosition(latLng);
+        if ((marker != null) && (marker.getTitle().equals("Marker"))){
+            marker.remove();
+        }
+        marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("Marker")
+                .snippet("HQ")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        et_address.setText(getLocalite(latLng.latitude, latLng.longitude));
+    }
 
     @Override
-    public void showProgressBar() {
+    public void onMapLongClick(LatLng latLng) {
+        Toast.makeText(CreationEvenementP2.this, "LongClick", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgressBarCreationEvent() {
 
     }
 
     @Override
-    public void hideProgressBar() {
+    public void hideProgressBarCreationEvent() {
 
     }
 
     @Override
-    public void showResult3(String s) {
+    public void showResultCreationEvent(String s) {
+        Toast.makeText(CreationEvenementP2.this, s, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void showProgressBarEnvoieCoordonnee() {
+
+    }
+
+    @Override
+    public void hideProgressBarEnvoieCoordonnee() {
+
+    }
+
+    @Override
+    public void showResultEnvoieCoordonnee(String s) {
+        Toast.makeText(CreationEvenementP2.this, s, Toast.LENGTH_SHORT).show();
+        eventId = s;
+
+    }
+
+    @Override
+    public void showProgressBarEnvoieLatLng() {
+
+    }
+
+    @Override
+    public void hideProgressBarEnvoieLatLng() {
+
+    }
+
+    @Override
+    public void showResultEnvoieLatLng(String s) {
+        Toast.makeText(CreationEvenementP2.this, s, Toast.LENGTH_SHORT).show();
+       // i++;
     }
 }

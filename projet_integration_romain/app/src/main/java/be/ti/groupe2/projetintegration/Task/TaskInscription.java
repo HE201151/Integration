@@ -45,8 +45,8 @@ public class TaskInscription extends AsyncTask<String, Void, String> {
             cv.put("pass",params[2]);
             cv.put("cpass",params[3]);
             cv.put("mail",params[4]);
-            cv.put("nom",params[4]);
-            cv.put("prenom",params[4]);
+            cv.put("nom",params[5]);
+            cv.put("prenom",params[6]);
 
             URL url = new URL(params[0]);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

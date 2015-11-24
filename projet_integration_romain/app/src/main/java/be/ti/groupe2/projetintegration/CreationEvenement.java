@@ -25,11 +25,12 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
     Button btn_versEvent = null;
     Button btn_versProfil= null;
 
-    TextView et_messageError =null;
+    TextView tv_messageError =null;
+
 
     EditText et_nomEvent = null;
     EditText et_motDePasse = null;
-
+    EditText et_description = null;
     EditText et_localite = null;
 
     RadioButton radio_public =null;
@@ -51,15 +52,17 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
         sp_nbEtape = (Spinner) findViewById(R.id.sp_nbEtape);
         et_nomEvent = (EditText)findViewById(R.id.EditText_nomEvent);
         et_motDePasse = (EditText)findViewById(R.id.EditText_motDePasse);
+        et_description = (EditText)findViewById(R.id.et_description);
 
         et_localite = (EditText)findViewById(R.id.EditText_localite);
 
-        et_messageError =(TextView)findViewById(R.id.EditText_messageError);
+        tv_messageError =(TextView)findViewById(R.id.tv_messageError);
 
         radio_public = (RadioButton)findViewById(R.id.radio_public);
         radio_prive = (RadioButton)findViewById(R.id.radio_prive);
 
-
+        tv_messageError.setVisibility(View.GONE);
+        et_motDePasse.setVisibility(View.GONE);
 
         btn_suivant.setOnClickListener(this);
         btn_raz.setOnClickListener(this);
@@ -78,28 +81,33 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
                 String nomEvent = et_nomEvent.getText().toString();
                 String mdpEvent = et_motDePasse.getText().toString(); // Hash ?
                 String localiteEvent =  et_localite.getText().toString();
+                String descriptionEvent = et_description.getText().toString();
                 boolean radioPrivee = radio_prive.isChecked();
                 int nbEtape = Integer.parseInt(sp_nbEtape.getSelectedItem().toString());
 
 
                 if( (nomEvent.isEmpty()) && (nomEvent != null) ){
-                    et_messageError.setText("Vous devez mettre un nom d'évènement.");
+                    tv_messageError.setText("Vous devez mettre un nom d'évènement.");
+                    tv_messageError.setVisibility(View.VISIBLE);
                 }
                 else if( radioPrivee == true ){
                     if((mdpEvent.isEmpty()) && (mdpEvent != null) ){
-                        et_messageError.setText("Vous devez mettre un mot de passe ou cochez public.");
+                        tv_messageError.setText("Vous devez mettre un mot de passe ou cochez public.");
+                        tv_messageError.setVisibility(View.VISIBLE);
                     }
                 }
                 else if( (localiteEvent.isEmpty()) && (localiteEvent != null) ){
-                    et_messageError.setText("Vous devez mettre un lieu d'évènement.");
+                    tv_messageError.setText("Vous devez mettre un lieu d'évènement.");
+                    tv_messageError.setVisibility(View.VISIBLE);
                 }
                 else{
                     Intent nextActivite = new Intent(CreationEvenement.this, CreationEvenementP2.class);
-                    nextActivite.putExtra("nomEvent", nomEvent);
-                    nextActivite.putExtra("mdpEvent", mdpEvent);
                     nextActivite.putExtra("localiteEvent", localiteEvent);
                     nextActivite.putExtra("nbEtape", nbEtape);
-                    Toast.makeText(this, "CLICK", Toast.LENGTH_SHORT).show();
+                    nextActivite.putExtra("nomEvent", nomEvent);
+                    nextActivite.putExtra("mdpEvent", mdpEvent);
+                    nextActivite.putExtra("descriptionEvent", descriptionEvent);
+
                     startActivity(nextActivite);
                 }
                 break;
@@ -107,16 +115,18 @@ public class CreationEvenement  extends Activity implements View.OnClickListener
                 et_nomEvent.getText().clear();
                 et_motDePasse.getText().clear();
                 et_localite.getText().clear();
+                et_description.getText().clear();
                 //mettre à zéro le spinner ?
                 break;
             case R.id.radio_public:
-                et_motDePasse.setVisibility(View.INVISIBLE);
+                et_motDePasse.setVisibility(View.GONE);
+
                 break;
             case R.id.radio_prive:
                 et_motDePasse.setVisibility(View.VISIBLE);
                 break;
             case R.id.bouton_accueil:
-                Intent eventFilActu = new Intent(this, filActu.class);
+                Intent eventFilActu = new Intent(this, FilActu.class);
                 startActivity(eventFilActu);
                 break;
             case R.id.bouton_event:

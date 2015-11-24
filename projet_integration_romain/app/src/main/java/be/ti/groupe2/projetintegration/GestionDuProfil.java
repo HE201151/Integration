@@ -13,6 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import be.ti.groupe2.projetintegration.Task.SearchUser;
 import be.ti.groupe2.projetintegration.Task.UpdateProfil;
 
@@ -31,8 +35,9 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
     EditText pass;
     EditText new_pass;
     EditText conf_pass;
+    EditText mail;
 
-    user u;
+    User u;
 
     int id;
 
@@ -60,6 +65,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
         pass = (EditText) findViewById(R.id.passwordProfil);
         new_pass = (EditText) findViewById(R.id.new_passProfil);
         conf_pass = (EditText) findViewById(R.id.confirm_passProfil);
+        mail = (EditText) findViewById(R.id.mailProfil);
 
 
 
@@ -85,7 +91,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bouton_accueil:
-                Intent profilFilActu = new Intent(this, filActu.class);
+                Intent profilFilActu = new Intent(this, FilActu.class);
                 startActivity(profilFilActu);
                 break;
             case R.id.bouton_event:
@@ -111,11 +117,28 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
         else {
 
             try {
-                JSONArray result = functions.extractJson(s);
+                JSONArray result = Functions.extractJson(s);
                 JSONObject jsonObject = result.getJSONObject(0);
                 Log.i("show2", "BADABOUM");
+                String sMdp =  jsonObject.getString("userPassword");
 
-                u = new user(jsonObject.getString("userLogin"),jsonObject.getString("userPassword"),id,jsonObject.getString("nom"),jsonObject.getString("prenom"),jsonObject.getString("userEmail"));
+                MessageDigest md = null;
+                try {
+                    md = MessageDigest.getInstance("SHA-256");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    md.update(sMdp.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                byte[] digestMdp = md.digest();
+
+                String mdpSafe = new String(digestMdp);
+
+                u = new User(jsonObject.getString("userLogin"),mdpSafe,id,jsonObject.getString("nom"),jsonObject.getString("prenom"),jsonObject.getString("userEmail"));
 
                 Log.i("show3", " : " + u.getFirst_name());
 
@@ -124,6 +147,7 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
                 pseudo.setText(u.getPseudo());
                 name.setText(u.getName());
                 firstname.setText(u.getFirst_name());
+                mail.setText(u.getMail());
 
 
             } catch (JSONException e) {
@@ -141,20 +165,20 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
 
 
 
-        if((pseudo.getText().toString() != null)|| (name.getText().toString() != null) ||  (firstname.getText().toString() != null)) {
+        if((pseudo.getText().toString() != null)|| (name.getText().toString() != null) ||  (firstname.getText().toString() != null)||  (mail.getText().toString() != null)) {
             Toast.makeText(this, "Les champs doivent être remplis!", Toast.LENGTH_SHORT).show();
         }else{
             if((new_pass.getText().toString() != null) || (conf_pass.getText().toString() != null) || (pass.getText().toString() != null)){
                 if(verifPass()){
-                Toast.makeText(this, "enregistrer BDD + pass", Toast.LENGTH_SHORT).show();
-                    upProfil.execute(JSON_URL, String.valueOf(id));
+                    Toast.makeText(this, "enregistrer BDD + pass", Toast.LENGTH_SHORT).show();
+                    upProfil.execute(JSON_URL, String.valueOf(id), pseudo.getText().toString(), name.getText().toString(), firstname.getText().toString(), conf_pass.getText().toString(), mail.getText().toString());
                 }else{
                     Toast.makeText(this, "passe pas bon", Toast.LENGTH_SHORT).show();
-                    upProfil.execute(JSON_URL2, String.valueOf(id), pseudo.getText().toString(), name.getText().toString(), firstname.getText().toString(), conf_pass.getText().toString(), u.getMail());
+                    //upProfil.execute(JSON_URL2, String.valueOf(id), pseudo.getText().toString(), name.getText().toString(), firstname.getText().toString(), conf_pass.getText().toString(), mail.getText().toString());
                 }
             }else {
                 Toast.makeText(this, "enregistrer BDD - pass", Toast.LENGTH_SHORT).show();
-                upProfil.execute(JSON_URL2, String.valueOf(id),pseudo.getText().toString(), name.getText().toString(), firstname.getText().toString(), u.getPass() , u.getMail());
+                upProfil.execute(JSON_URL2, String.valueOf(id),pseudo.getText().toString(), name.getText().toString(), firstname.getText().toString(), u.getPass() , mail.getText().toString());
             }
         }
 
@@ -162,7 +186,24 @@ public class GestionDuProfil extends Activity implements View.OnClickListener,Se
 
     public boolean verifPass(){
         boolean ok = false;
-        if(u.getPass()==pass.getText().toString()){
+        String sMdp = pass.getText().toString();
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            md.update(sMdp.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        byte[] digestMdp = md.digest();
+
+        String mdpSafe = new String(digestMdp);
+
+        if(u.getPass()== mdpSafe){
             if(new_pass.getText().toString()==conf_pass.getText().toString()){
                 if(new_pass.getText().toString().length() >3){
                     ok = true;

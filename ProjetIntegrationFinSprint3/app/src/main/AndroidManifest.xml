@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="be.ti.groupe2.projetintegration" >
+    xmlns:uses-featureandroid="http://schemas.android.com/apk/res-auto"
+    package="be.ti.groupe2.projetintegration">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,12 +14,18 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!--utilisation compa pour Jeux de Piste-->
+    <uses-feature android:name="android.hardware.sensor.compass"
+    android:required="true"/>
+
+
+
     <application
+        android:name=".VariableGlobale"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="VariableGlobale" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -41,11 +48,13 @@
             android:name=".Inscription"
             android:label="@string/app_name" />
         <activity
-            android:name=".filActu"
+            android:name=".FilActu"
             android:label="@string/app_name" />
         <activity
-            android:name=".visuEvent"
-            android:label="@string/app_name" />
+            android:name=".VisuEvent"
+            android:label="@string/app_name"
+            android:noHistory="true"/>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -55,7 +64,17 @@
 
         <activity
             android:name=".CreationEvenementP2"
-            android:label="@string/title_activity_creation_evenement_p2" >
+            android:label="@string/title_activity_creation_evenement_p2"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:name=".JeuxDePiste"
+            android:label="@string/title_activity_jeux_de_piste"
+            >
+        </activity>
+        <activity
+            android:name=".Jeux"
+            android:label="@string/app_name" >
         </activity>
     </application>
 
